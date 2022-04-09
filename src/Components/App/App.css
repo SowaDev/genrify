@@ -38,14 +38,20 @@ h2 {
   color: #fff;
 }
 
-.App-playlist {
+.Filters {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.Tracks {
   display: flex;
   justify-content: space-between;
   width: 100%;
 }
 
 @media only screen and (max-width: 1020px) {
-  .App-playlist {
+  .Tracks {
     align-items: center;
     flex-direction: column;
   }
