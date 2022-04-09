@@ -43,6 +43,30 @@ const Spotify = {
         })
     },
 
+    getPlaylists() {
+        const accessToken = this.getAccessToken();
+        const headers = {
+            Authorization: `Bearer ${accessToken}`
+        }
+        let username;
+        return fetch(`https://api.spotify.com/v1/me`, { headers: headers })
+        .then(response => response.json())
+        .then(jsonResponse => {
+            username = jsonResponse.id
+            return fetch(`https://api.spotify.com/v1/users/${username}/playlists`, { headers: headers })
+            .then(response => response.json())
+            .then(jsonResponse => {
+                if(!jsonResponse)
+                    return []
+                return jsonResponse.items.map(playlist => ({
+                    id: playlist.id,
+                    name: playlist.name,
+                    tracks: playlist.tracks
+                }))
+            })
+        })
+    },
+
     savePlaylist(name, trackUris){
         if(!name || !trackUris) { 
             return
