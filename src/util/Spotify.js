@@ -3,6 +3,14 @@ const clientID = 'db19cb1182f140fab5eb77bcecedcd12'
 const redirectUrl = 'http://localhost:3000/'
 
 const Spotify = {
+
+    fetchSpotify(url) {
+        const token = Spotify.getAccessToken()
+        return fetch(`https://api.spotify.com/v1/${url}`, 
+        { headers: {
+            Authorization: `Bearer ${token}`
+        }})
+    },
     
     getAccessToken() {
         if(accessToken){
@@ -24,11 +32,8 @@ const Spotify = {
     },
 
     search(term) {
-        const token = Spotify.getAccessToken()
-        return fetch(`https://api.spotify.com/v1/search?type=track&q=${term}`, 
-        { headers: {
-            Authorization: `Bearer ${token}`
-        }}).then(response => {
+        return this.fetchSpotify(`search?type=track&q=${term}`)
+        .then(response => {
             return response.json()
         }).then(jsonResponse => {
             if(!jsonResponse)
@@ -44,11 +49,8 @@ const Spotify = {
     },
 
     getTracks(playlistId) {
-        const token = Spotify.getAccessToken()
-        return fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, 
-        { headers: {
-            Authorization: `Bearer ${token}`
-        }}).then(response => {
+        return this.fetchSpotify(`playlists/${playlistId}/tracks`)
+        .then(response => {
             return response.json()
         }).then(jsonResponse => {
             if(!jsonResponse)
@@ -65,16 +67,12 @@ const Spotify = {
     },
 
     getPlaylists() {
-        const accessToken = this.getAccessToken();
-        const headers = {
-            Authorization: `Bearer ${accessToken}`
-        }
         let username;
-        return fetch(`https://api.spotify.com/v1/me`, { headers: headers })
+        return this.fetchSpotify('me')
         .then(response => response.json())
         .then(jsonResponse => {
             username = jsonResponse.id
-            return fetch(`https://api.spotify.com/v1/users/${username}/playlists`, { headers: headers })
+            return this.fetchSpotify(`users/${username}/playlists`)
             .then(response => response.json())
             .then(jsonResponse => {
                 if(!jsonResponse)
@@ -82,7 +80,8 @@ const Spotify = {
                 return jsonResponse.items.map(playlist => ({
                     id: playlist.id,
                     name: playlist.name,
-                    tracksUri: playlist.tracks.href
+                    tracksUri: playlist.tracks.href,
+                    total: playlist.tracks.total
                 }))
             })
         })
