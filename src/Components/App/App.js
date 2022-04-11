@@ -15,6 +15,7 @@ class App extends React.Component {
     this.savePlaylist = this.savePlaylist.bind(this)
     this.search = this.search.bind(this)
     this.getPlaylists = this.getPlaylists.bind(this)
+    this.getTracks = this.getTracks.bind(this)
     this.state = {
       playlists: [],
       searchResults: [],
@@ -69,6 +70,12 @@ class App extends React.Component {
     })
   }
 
+  getTracks(tracksUri){
+    Spotify.getTracks(tracksUri).then(tracks => {
+      this.setState( { searchResults: tracks })
+    })
+  }
+
   render() {
     return (
       <div>
@@ -76,7 +83,8 @@ class App extends React.Component {
         <div className="App">
           <SearchBar onSearch={this.search} />
           <div className="Filters">
-            <PlaylistBar playlists={this.state.playlists} />
+            <PlaylistBar playlists={this.state.playlists}
+                         onGetTracks={this.getTracks} />
           </div>
           <div className="Tracks">
             <SearchResults results={this.state.searchResults} 

@@ -43,6 +43,27 @@ const Spotify = {
         })
     },
 
+    getTracks(playlistId) {
+        const token = Spotify.getAccessToken()
+        return fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, 
+        { headers: {
+            Authorization: `Bearer ${token}`
+        }}).then(response => {
+            return response.json()
+        }).then(jsonResponse => {
+            if(!jsonResponse)
+                return []
+            console.log(jsonResponse)
+            return jsonResponse.items.map(item => ({
+                id: item.track.id,
+                name: item.track.name,
+                artist: item.track.artists[0].name,
+                album: item.track.album.name,
+                uri: item.track.uri
+            }))
+        })
+    },
+
     getPlaylists() {
         const accessToken = this.getAccessToken();
         const headers = {
@@ -61,7 +82,7 @@ const Spotify = {
                 return jsonResponse.items.map(playlist => ({
                     id: playlist.id,
                     name: playlist.name,
-                    tracks: playlist.tracks
+                    tracksUri: playlist.tracks.href
                 }))
             })
         })
@@ -95,10 +116,6 @@ const Spotify = {
                     method: 'POST',
                     body: JSON.stringify({ uris: trackUris })
                 })
-                // .then(response => response.json())
-                // .then(jsonResponse => {
-                     
-                // })
             })
         })
     }
