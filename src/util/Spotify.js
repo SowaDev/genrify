@@ -4,15 +4,15 @@ const redirectUrl = 'http://localhost:3000/'
 
 const Spotify = {
 
-    fetchSpotify(url) {
-        const token = Spotify.getAccessToken()
+    fetchSpotify(url, scope) {
+        const token = Spotify.getAccessToken(scope)
         return fetch(`https://api.spotify.com/v1/${url}`, 
         { headers: {
             Authorization: `Bearer ${token}`
         }})
     },
     
-    getAccessToken() {
+    getAccessToken(scope) {
         if(accessToken){
             return accessToken
         }
@@ -26,13 +26,13 @@ const Spotify = {
             window.history.pushState('Access Token', null, '/')
             return accessToken
         } else {
-            const accessUrl = `https://accounts.spotify.com/authorize?client_id=${clientID}&response_type=token&scope=playlist-modify-public&redirect_uri=${redirectUrl}`
+            const accessUrl = `https://accounts.spotify.com/authorize?client_id=${clientID}&response_type=token&scope=${scope}&redirect_uri=${redirectUrl}`
             window.location = accessUrl
         }
     },
 
     search(term) {
-        return this.fetchSpotify(`search?type=track&q=${term}`)
+        return this.fetchSpotify(`search?type=track&q=${term}`, 'playlist-modify-public')
         .then(response => {
             return response.json()
         }).then(jsonResponse => {
@@ -49,13 +49,13 @@ const Spotify = {
     },
 
     getTracks(playlistId) {
-        return this.fetchSpotify(`playlists/${playlistId}/tracks`)
+        return this.fetchSpotify(`playlists/${playlistId}/tracks`, 'playlist-modify-public')
         .then(response => {
             return response.json()
         }).then(jsonResponse => {
             if(!jsonResponse)
                 return []
-            console.log(jsonResponse)
+            // console.log(jsonResponse)
             return jsonResponse.items.map(item => ({
                 id: item.track.id,
                 name: item.track.name,
@@ -67,12 +67,11 @@ const Spotify = {
     },
 
     getPlaylists() {
-        let username;
-        return this.fetchSpotify('me')
+        return this.fetchSpotify('me', 'playlist-modify-public')
         .then(response => response.json())
         .then(jsonResponse => {
-            username = jsonResponse.id
-            return this.fetchSpotify(`users/${username}/playlists`)
+            let username = jsonResponse.id
+            return this.fetchSpotify(`users/${username}/playlists`, 'playlist-modify-public')
             .then(response => response.json())
             .then(jsonResponse => {
                 if(!jsonResponse)
@@ -87,11 +86,52 @@ const Spotify = {
         })
     },
 
+
+
+
+    get50LikedTracks(offset) {
+        return this.fetchSpotify(`me/tracks?offset=${offset}&limit=50`, 'user-library-read')
+        .then(response => {
+            return response.json()
+        }).then(jsonResponse => {
+            if(!jsonResponse)
+                return []
+            return jsonResponse.items.map(item => ({
+                id: item.track.id,
+                name: item.track.name,
+                artist: item.track.artists[0].name,
+                album: item.track.album.name,
+                uri: item.track.uri
+            }))
+        })
+    },
+
+    getLikedTracksTotal() {
+        return this.fetchSpotify(`me/tracks`)
+        .then(response => {
+            return response.json();
+        }).then(jsonResponse => {
+            return jsonResponse.total;
+        })
+    },
+
+    getLikedTracks() {
+        let offset = 0;
+        const tracksPromises = [] 
+        return this.getLikedTracksTotal().then(total => {
+            do {
+                tracksPromises.push(this.get50LikedTracks(offset))
+                offset += 50;
+            } while(offset < total)
+            return Promise.all(tracksPromises)
+        }).then(result => result.flat())
+    },
+
     savePlaylist(name, trackUris){
         if(!name || !trackUris) { 
             return
         }
-        const accessToken = this.getAccessToken();
+        const accessToken = this.getAccessToken('playlist-modify-public');
         const headers = {
                 Authorization: `Bearer ${accessToken}`
         }
