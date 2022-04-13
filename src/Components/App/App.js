@@ -16,6 +16,7 @@ class App extends React.Component {
     this.search = this.search.bind(this)
     this.getPlaylists = this.getPlaylists.bind(this)
     this.getTracks = this.getTracks.bind(this)
+    this.getLikedTracks = this.getLikedTracks.bind(this)
     this.state = {
       playlists: [],
       searchResults: [],
@@ -29,6 +30,12 @@ class App extends React.Component {
     this.getPlaylists();
   }
 
+    getLikedTracks() {
+      Spotify.getLikedTracks().then(likedTracks => {
+        this.setState({ searchResults:  likedTracks} )
+      })
+    }
+  
   addTrack(track){
     let playlist = this.state.playlistTracks
     if(playlist.find(savedTrack => savedTrack.id === track.id)){
@@ -72,7 +79,7 @@ class App extends React.Component {
 
   getTracks(tracksUri){
     Spotify.getTracks(tracksUri).then(tracks => {
-      this.setState( { searchResults: tracks })
+      this.setState( { searchResults: tracks } )
     })
   }
 
@@ -81,10 +88,12 @@ class App extends React.Component {
       <div>
         <h1>Ja<span className="highlight">mmm</span>ing</h1>
         <div className="App">
-          <SearchBar onSearch={this.search} />
+          <SearchBar onSearch={this.search}
+                     onGetLiked={this.getLikedTracks} />
           <div className="Filters">
             <PlaylistBar playlists={this.state.playlists}
-                         onGetTracks={this.getTracks} />
+                         onGetTracks={this.getTracks}
+                         onGetLikedTracks={this.getLikedTracks} />
           </div>
           <div className="Tracks">
             <SearchResults results={this.state.searchResults} 

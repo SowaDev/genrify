@@ -1,12 +1,23 @@
-/* .PlaylistList {
-    width: 50%;
-    height: 300px;
-    overflow-y: scroll;
-    padding: .88rem;
-    background-color: rgba(1, 12, 63, 0.7);
-    box-shadow: 0 4px 2px 2px #000000;
-    margin: .88rem 0;
-  } */
-  .TrackList {
-    width: 100%;
-  }
+.TrackList {
+  width: 100%;
+}
+
+.Saved-tracks {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: .9rem;
+  height: 1.8rem;
+  border-bottom: 1px solid rgba(256, 256, 256, 0.8);
+}
+
+p {
+  font-size: .83rem;
+  font-weight: 300;
+  color: rgba(256, 256, 256, 0.8);
+}
+
+.Saved-tracks h3:hover {
+  color: rgba(265, 265, 265, .5);
+}

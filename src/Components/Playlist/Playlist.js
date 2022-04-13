@@ -16,7 +16,7 @@ class Playlist extends React.Component {
             <div className='Playlist'>
                 <div className='Playlist-information'>
                     <h3 onClick={this.handleClick}>{this.props.name}</h3>
-                    <p>tracks: 22</p>
+                    <p>tracks: {this.props.total}</p>
                 </div>
             </div>
         )
