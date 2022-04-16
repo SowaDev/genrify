@@ -55,11 +55,12 @@ const Spotify = {
         }).then(jsonResponse => {
             if(!jsonResponse)
                 return []
-            // console.log(jsonResponse)
             return jsonResponse.items.map(item => ({
                 id: item.track.id,
                 name: item.track.name,
                 artist: item.track.artists[0].name,
+                artistId: item.track.artists[0].id,
+                genres: [],
                 album: item.track.album.name,
                 uri: item.track.uri
             }))
@@ -86,9 +87,6 @@ const Spotify = {
         })
     },
 
-
-
-
     get50LikedTracks(offset) {
         return this.fetchSpotify(`me/tracks?offset=${offset}&limit=50`, 'user-library-read')
         .then(response => {
@@ -100,32 +98,93 @@ const Spotify = {
                 id: item.track.id,
                 name: item.track.name,
                 artist: item.track.artists[0].name,
+                artistId: item.track.artists[0].id,
+                genres: [],
                 album: item.track.album.name,
                 uri: item.track.uri
             }))
         })
     },
 
-    getLikedTracksTotal() {
-        return this.fetchSpotify(`me/tracks`)
+    async getLikedTracksTotal() {
+        const response = await this.fetchSpotify(`me/tracks`);
+        const jsonResponse = await response.json();
+        return jsonResponse.total;
+    },
+
+    // getLikedTracks() {
+    //     let offset = 0;
+    //     const tracksPromises = [] 
+    //     return this.getLikedTracksTotal().then(total => {
+    //         do {
+    //             tracksPromises.push(this.get50LikedTracks(offset))
+    //             offset += 50;
+    //         } while(offset < total)
+    //         return Promise.all(tracksPromises)
+    //     }).then(result => result.flat())
+    // },
+
+    async getLikedTracks() {
+        let offset = 0;
+        const tracks = [];
+        let total = await this.getLikedTracksTotal();
+        do {
+            let part50Tracks = await this.get50LikedTracks(offset);
+            tracks.push(part50Tracks)
+            offset += 50;
+        } while(offset < total)
+        // let result = tracks.flat()
+        // console.log(result)
+        return tracks.flat();
+    },
+
+    getGenreByArtist(artistId) {
+        return this.fetchSpotify(`artists/${artistId}`, 'playlist-modify-public')
         .then(response => {
             return response.json();
         }).then(jsonResponse => {
-            return jsonResponse.total;
+            if(!jsonResponse)
+                return []
+            // let result = jsonResponse.genres
+            // if(result === [])
+            //     result = ['none']
+            return jsonResponse.genres;
         })
     },
 
-    getLikedTracks() {
-        let offset = 0;
-        const tracksPromises = [] 
-        return this.getLikedTracksTotal().then(total => {
-            do {
-                tracksPromises.push(this.get50LikedTracks(offset))
-                offset += 50;
-            } while(offset < total)
-            return Promise.all(tracksPromises)
-        }).then(result => result.flat())
+    async getTracksGenres(tracks) {
+        await Promise.all(tracks.map(async (track) => {
+            let trackGenres = await Spotify.getGenreByArtist(track.artistId)
+            track.genres = trackGenres
+        }))
+        return tracks
     },
+
+    // async getPlaylistGenres(tracks) {
+    //     const playlistGenres = new Map();
+    //     await Promise.all(tracks.map(async (track) => {
+    //         let trackGenres = await Spotify.getGenreByArtist(track.artistId);
+    //         trackGenres.forEach(genre => {
+    //             if(!playlistGenres.has(genre))
+    //                 playlistGenres.set(genre, 1)
+    //             else
+    //                 playlistGenres.set(genre, playlistGenres.get(genre) + 1)
+    //         })
+    //     }))
+    //     return playlistGenres;  
+    //   },
+
+    async getPlaylistGenres(tracks) {
+        const playlistGenres = [];
+        await Promise.all(tracks.map(async (track) => {
+            let trackGenres = await Spotify.getGenreByArtist(track.artistId);
+            trackGenres.forEach(genre => {
+                if(!playlistGenres.includes(genre))
+                    playlistGenres.push(genre)
+            })
+        }))
+        return playlistGenres;  
+      },
 
     savePlaylist(name, trackUris){
         if(!name || !trackUris) { 

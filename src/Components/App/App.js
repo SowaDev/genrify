@@ -5,6 +5,7 @@ import SearchResults from '../SearchResults/SearchResults'
 import NewPlaylist from '../NewPlaylist/NewPlaylist'
 import Spotify from '../../util/Spotify'
 import PlaylistBar from '../PlaylistBar/PlaylistBar';
+import GenreBar from '../GenreBar/GenreBar';
 
 class App extends React.Component {
   constructor(props){
@@ -17,11 +18,17 @@ class App extends React.Component {
     this.getPlaylists = this.getPlaylists.bind(this)
     this.getTracks = this.getTracks.bind(this)
     this.getLikedTracks = this.getLikedTracks.bind(this)
+    // this.getTracksGenres = this.getTracksGenres.bind(this)
+    // this.getPlaylistGenres = this.getPlaylistGenres.bind(this)
     this.state = {
       playlists: [],
       searchResults: [],
       playlistName: '',
-      playlistTracks: []
+      playlistTracks: [],
+      playlistGenres: ['rap', 'house'],
+      newPlaylistGenres: []
+      // playlistGenres: new Map(),
+      // newPlaylistGenres: new Map()
     }
   }
 
@@ -30,11 +37,16 @@ class App extends React.Component {
     this.getPlaylists();
   }
 
-    getLikedTracks() {
-      Spotify.getLikedTracks().then(likedTracks => {
-        this.setState({ searchResults:  likedTracks} )
-      })
-    }
+  getLikedTracks() {
+    Spotify.getLikedTracks().then(likedTracks => {
+      return Spotify.getTracksGenres(likedTracks)
+    }).then(tracksWithGenres => {
+      this.setState({ searchResults: tracksWithGenres })
+      return Spotify.getPlaylistGenres(tracksWithGenres)
+    }).then(genres => {
+      this.setState({ playlistGenres: genres})
+    })
+  }
   
   addTrack(track){
     let playlist = this.state.playlistTracks
@@ -77,11 +89,25 @@ class App extends React.Component {
     })
   }
 
-  getTracks(tracksUri){
+  getTracks(tracksUri) {
     Spotify.getTracks(tracksUri).then(tracks => {
-      this.setState( { searchResults: tracks } )
+      return Spotify.getTracksGenres(tracks)
+    }).then(tracksWithGenres => {
+      this.setState({ searchResults: tracksWithGenres})
+      return Spotify.getPlaylistGenres(tracksWithGenres)
+    }).then(genres => {
+      // console.log(genres)
+      this.setState({ playlistGenres: genres })
     })
   }
+
+  // getPlaylistGenres(tracks) {
+  //   return Spotify.getPlaylistGenres(tracks)
+  // }
+
+  // getTracksGenres(tracks) {
+  //   return Spotify.getTracksGenres(tracks)
+  // }
 
   render() {
     return (
@@ -94,6 +120,8 @@ class App extends React.Component {
             <PlaylistBar playlists={this.state.playlists}
                          onGetTracks={this.getTracks}
                          onGetLikedTracks={this.getLikedTracks} />
+            <GenreBar playlistGenres={this.state.playlistGenres}
+                      newPlaylistGenres={this.state.newPlaylistGenres} />
           </div>
           <div className="Tracks">
             <SearchResults results={this.state.searchResults} 
