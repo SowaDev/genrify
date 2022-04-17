@@ -25,10 +25,8 @@ class App extends React.Component {
       searchResults: [],
       playlistName: '',
       playlistTracks: [],
-      playlistGenres: ['rap', 'house'],
-      newPlaylistGenres: []
-      // playlistGenres: new Map(),
-      // newPlaylistGenres: new Map()
+      playlistGenres: new Map(),
+      newPlaylistGenres: new Map()
     }
   }
 

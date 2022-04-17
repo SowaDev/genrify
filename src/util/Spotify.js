@@ -160,27 +160,15 @@ const Spotify = {
         return tracks
     },
 
-    // async getPlaylistGenres(tracks) {
-    //     const playlistGenres = new Map();
-    //     await Promise.all(tracks.map(async (track) => {
-    //         let trackGenres = await Spotify.getGenreByArtist(track.artistId);
-    //         trackGenres.forEach(genre => {
-    //             if(!playlistGenres.has(genre))
-    //                 playlistGenres.set(genre, 1)
-    //             else
-    //                 playlistGenres.set(genre, playlistGenres.get(genre) + 1)
-    //         })
-    //     }))
-    //     return playlistGenres;  
-    //   },
-
     async getPlaylistGenres(tracks) {
-        const playlistGenres = [];
+        const playlistGenres = new Map();
         await Promise.all(tracks.map(async (track) => {
             let trackGenres = await Spotify.getGenreByArtist(track.artistId);
             trackGenres.forEach(genre => {
-                if(!playlistGenres.includes(genre))
-                    playlistGenres.push(genre)
+                if(!playlistGenres.has(genre))
+                    playlistGenres.set(genre, 1)
+                else
+                    playlistGenres.set(genre, playlistGenres.get(genre) + 1)
             })
         }))
         return playlistGenres;  

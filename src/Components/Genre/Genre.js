@@ -6,7 +6,7 @@ class Genre extends React.Component {
         return(
         <button className="GenreButton"
             onClick={this.search}>
-            {this.props.name}
+            {this.props.name} | {this.props.quantity}
         </button>
         )
     }
