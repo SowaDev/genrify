@@ -1,5 +1,5 @@
-.GenreBar {
-    /* width: 50%; */
+.ChosenGenreBar {
+    width: 50%;
     height: 300px;
     overflow-y: scroll;
     padding: .88rem;
@@ -16,7 +16,7 @@
 }
 
 @media only screen and (max-width: 1020px) {
-    .GenreBar {
+    .ChosenGenreBar {
       width: 90%;
       margin-bottom: 2rem;
     }

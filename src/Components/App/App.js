@@ -122,13 +122,19 @@ class App extends React.Component {
                       newPlaylistGenres={this.state.newPlaylistGenres} />
           </div>
           <div className="Tracks">
-            <SearchResults results={this.state.searchResults} 
+            <div className="Search-results">
+              <SearchResults results={this.state.searchResults} 
                            onAdd={this.addTrack} />
-            <NewPlaylist name={this.state.playlistName} 
-                      tracks={this.state.playlistTracks}
-                      onRemove={this.removeTrack} 
-                      onNameChange={this.updatePlaylistName}
-                      onSave={this.savePlaylist} />
+            </div>
+            <div className="New-playlist">
+              <GenreBar playlistGenres={this.state.playlistGenres}
+                        newPlaylistGenres={this.state.newPlaylistGenres} />
+              <NewPlaylist name={this.state.playlistName} 
+                        tracks={this.state.playlistTracks}
+                        onRemove={this.removeTrack} 
+                        onNameChange={this.updatePlaylistName}
+                        onSave={this.savePlaylist} />
+            </div>
           </div>
         </div>
       </div>
