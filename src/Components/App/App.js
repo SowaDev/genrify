@@ -50,21 +50,6 @@ class App extends React.Component {
     })
   }
 
-  addTracksByGenre(genre) {
-    let playlist = this.state.searchResults
-    playlist.forEach(track => {
-      // console.log(track)
-      if(track.genres.includes(genre)) {
-        this.addTrack(track)
-        // console.log(track.name)
-      }
-    })
-  }
-
-  removeTracksByGenre(genre) {
-
-  }
-
   removeGenres(track) {
     console.log("bitch")
     let chosenGenres = this.state.newPlaylistGenres
