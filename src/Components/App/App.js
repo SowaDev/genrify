@@ -19,6 +19,9 @@ class App extends React.Component {
     this.getPlaylists = this.getPlaylists.bind(this)
     this.getTracks = this.getTracks.bind(this)
     this.getLikedTracks = this.getLikedTracks.bind(this)
+    this.addTracksByGenre = this.addTracksByGenre.bind(this)
+    this.removeGenres = this.removeGenres.bind(this)
+    this.addGenres = this.addGenres.bind(this)
     // this.getTracksGenres = this.getTracksGenres.bind(this)
     // this.getPlaylistGenres = this.getPlaylistGenres.bind(this)
     this.state = {
@@ -46,6 +49,44 @@ class App extends React.Component {
       this.setState({ playlistGenres: genres})
     })
   }
+
+  addTracksByGenre(genre) {
+    let playlist = this.state.searchResults
+    playlist.forEach(track => {
+      // console.log(track)
+      if(track.genres.includes(genre)) {
+        this.addTrack(track)
+        // console.log(track.name)
+      }
+    })
+  }
+
+  removeTracksByGenre(genre) {
+
+  }
+
+  removeGenres(track) {
+    console.log("bitch")
+    let chosenGenres = this.state.newPlaylistGenres
+    track.genres.forEach(genre => {
+      if(chosenGenres.get(genre) != 1)
+        chosenGenres.set(genre, chosenGenres.get(genre) - 1)
+      else
+        chosenGenres.delete(genre)
+    })
+    this.setState({ newPlaylistGenres: chosenGenres })
+  }
+
+  addGenres(track){
+    let chosenGenres = this.state.newPlaylistGenres;
+    track.genres.forEach(genre => {
+      if(!chosenGenres.has(genre))
+        chosenGenres.set(genre, 1)
+      else
+        chosenGenres.set(genre, chosenGenres.get(genre) + 1)
+    })
+    // this.setState({ newPlaylistGenres: chosenGenres })
+  }
   
   addTrack(track){
     let playlist = this.state.playlistTracks
@@ -53,6 +94,7 @@ class App extends React.Component {
       return;
     }
     playlist.push(track)
+    this.addGenres(track)
     this.setState({ playlistTracks: playlist })
   }
 
@@ -60,6 +102,7 @@ class App extends React.Component {
     let playlist = this.state.playlistTracks
     playlist = playlist.filter(savedTrack => savedTrack.id !== track.id)
     this.setState({ playlistTracks: playlist})
+    this.removeGenres(track)
   }
 
   updatePlaylistName(name){
