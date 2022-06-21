@@ -5,7 +5,6 @@ import Genre from '../Genre/Genre'
 class GenreList extends React.Component {
     sortGenres() {
         const sortedGenres = new Map([...this.props.genres].sort((a, b) => b[1] - a[1]))
-        console.log(sortedGenres)
         return sortedGenres
     }
 
@@ -16,7 +15,10 @@ class GenreList extends React.Component {
                     Array.from(this.sortGenres().keys()).map(genre => {
                         return <Genre name={genre}
                                       key={genre}
-                                      quantity={this.props.genres.get(genre)} />
+                                      quantity={this.props.genres.get(genre)}
+                                      onAddGenre={this.props.onAddGenre}
+                                      onRemoveGenre={this.props.onRemoveGenre}
+                                      isRemoval={this.props.isRemoval} />
                     })
                 }
             </div>

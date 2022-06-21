@@ -8,7 +8,9 @@ class ChosenGenreBar extends React.Component {
         return(
         <div className='ChosenGenreBar'>
             <h2>Added Genres</h2>
-            <GenreList genres={this.props.genres} />
+            <GenreList genres={this.props.genres}
+                       onRemoveGenre={this.props.onRemoveGenre}
+                       isRemoval={true} />
         </div>
         )
     }
