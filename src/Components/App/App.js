@@ -23,6 +23,7 @@ class App extends React.Component {
     this.removeGenres = this.removeGenres.bind(this)
     this.addGenres = this.addGenres.bind(this)
     this.removeTracksByGenre = this.removeTracksByGenre.bind(this)
+    this.addAllTracks = this.addAllTracks.bind(this)
     // this.getTracksGenres = this.getTracksGenres.bind(this)
     // this.getPlaylistGenres = this.getPlaylistGenres.bind(this)
     this.state = {
@@ -86,6 +87,15 @@ class App extends React.Component {
         chosenGenres.set(genre, chosenGenres.get(genre) + 1)
     })
     this.setState({ newPlaylistGenres: chosenGenres })
+  }
+
+  addAllTracks() {
+    let tracks = this.state.searchResults;
+    let genres = this.state.playlistGenres;
+    this.setState({
+      playlistTracks: tracks,
+      newPlaylistGenres: genres
+    });
   }
   
   addTrack(track){
@@ -167,7 +177,8 @@ class App extends React.Component {
           </div>
           <div className="Tracks">
             <SearchResults results={this.state.searchResults} 
-                           onAdd={this.addTrack} />
+                           onAdd={this.addTrack}
+                           onAddAll={this.addAllTracks} />
             <div className="New-playlist">
               <ChosenGenreBar genres={this.state.newPlaylistGenres}
                               onRemoveGenre={this.removeTracksByGenre} />

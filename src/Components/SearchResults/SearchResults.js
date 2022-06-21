@@ -6,7 +6,13 @@ class SearchResults extends React.Component {
     render() {
         return(
             <div className="SearchResults">
-                <h2>Results</h2>
+                <div className="Header">
+                    <h2>Results</h2>
+                    <button className="Add-all"
+                            onClick={this.props.onAddAll}>
+                        add all songs
+                    </button>
+                </div>
                 <TrackList tracks={this.props.results} 
                            onAdd={this.props.onAdd} 
                            isRemoval={false}/>
