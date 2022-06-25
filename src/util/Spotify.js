@@ -175,13 +175,11 @@ const Spotify = {
       },
 
     savePlaylist(name, trackUris){
-        if(!name || !trackUris) { 
+        if(!name || !trackUris.length) { 
             return
         }
         const accessToken = this.getAccessToken('playlist-modify-public');
-        const headers = {
-                Authorization: `Bearer ${accessToken}`
-        }
+        const headers = { Authorization: `Bearer ${accessToken}` };
         let username;
         return fetch('https://api.spotify.com/v1/me', { headers: headers })
         .then(response => response.json())
@@ -196,9 +194,9 @@ const Spotify = {
             .then(response => response.json())
             .then(jsonResponse => {
                 const playlistId = jsonResponse.id
-                return fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, 
+                return fetch(`https://api.spotify.com/v1/users/${username}/playlists/${playlistId}/tracks`, 
                 {
-                    headers: headers,
+                    headers: headers, 
                     method: 'POST',
                     body: JSON.stringify({ uris: trackUris })
                 })
