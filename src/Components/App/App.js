@@ -53,9 +53,14 @@ class App extends React.Component {
   }
 
   addTracksByGenre(genre) {
-    let playlist = this.state.searchResults;
-    playlist = playlist.filter(track => track.genres.includes(genre))
-    playlist.forEach(track => this.addGenres(track))
+    let playlist = this.state.playlistTracks;
+    let tracksToAdd = this.state.searchResults.filter(track => track.genres.includes(genre))
+    tracksToAdd.forEach(track => {
+      if(!playlist.includes(track)) {
+        this.addGenres(track)
+        playlist.push(track)
+      }
+    })
     this.setState({ playlistTracks: playlist })
   }
 
