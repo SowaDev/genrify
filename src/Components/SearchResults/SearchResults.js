@@ -10,7 +10,7 @@ class SearchResults extends React.Component {
                     <h2>Results</h2>
                     <button className="Add-all"
                             onClick={this.props.onAddAll}>
-                        add all songs
+                        + all
                     </button>
                 </div>
                 <TrackList tracks={this.props.results} 

@@ -14,7 +14,7 @@
     justify-content:space-between;
   }
 
-.Add-all {
+/* .Add-all {
   cursor: pointer;
   width: 8.11rem;
   padding: .77rem 0;
@@ -30,6 +30,20 @@
 
 .Add-all:hover {
   background-color: rgba(108, 65, 233, .7);
+} */
+
+.Add-all {
+  cursor: pointer;
+  padding: .5rem;
+  font-size: 1.05rem;
+  transition: color .25s;
+  border: 0px;
+  background-color: rgba(0, 0, 0, 0);
+  color: #fff;
+}
+
+.Add-all:hover {
+  color: rgba(265, 265, 265, .5);
 }
   
   ::-webkit-scrollbar {
