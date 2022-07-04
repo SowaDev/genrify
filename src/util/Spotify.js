@@ -42,6 +42,8 @@ const Spotify = {
                 id: track.id,
                 name: track.name,
                 artist: track.artists[0].name,
+                artistId: track.artists[0].id,
+                genres: [],
                 album: track.album.name,
                 uri: track.uri
             }))

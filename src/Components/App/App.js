@@ -151,10 +151,19 @@ class App extends React.Component {
     })
   }
 
-  search(term) {
-    Spotify.search(term).then(searchResults => {
-      this.setState({ searchResults: searchResults})
-    })
+  // search(term) {
+  //   Spotify.search(term).then(searchResults => {
+  //     this.setState({ searchResults: searchResults})
+  //   })
+  // }
+
+  async search(term) {
+    console.log(term)
+    let searchResults = await Spotify.search(term);
+    searchResults = await Spotify.getTracksGenres(searchResults);
+    let searchGenres = await Spotify.getPlaylistGenres(searchResults);
+    this.setState({ searchResults: searchResults,
+                    playlistGenres: searchGenres });
   }
 
   getTracks(tracksUri) {
