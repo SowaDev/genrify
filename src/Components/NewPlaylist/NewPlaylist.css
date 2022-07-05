@@ -1,7 +1,7 @@
 .NewPlaylist {
-    display: flex;
+    /* display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: center; */
     overflow-y: scroll;
     height: 950px;
     /* width: 37%; */
@@ -14,7 +14,7 @@
   }
   
   .NewPlaylist input {
-    width: 100%;
+    width: 80%;
     border: 0;
     outline: 0;
     background: transparent;
@@ -22,6 +22,14 @@
     font-family: 'Poppins', sans-serif;
     font-size: 1.55rem;
     color: #fff;
+    margin: 20px 0;
+  }
+
+  .Playlist-information {
+    /* flex-grow: 1; */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
   
   .Playlist-save {
