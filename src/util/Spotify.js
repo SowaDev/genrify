@@ -178,36 +178,6 @@ const Spotify = {
         return playlistGenres;  
       },
 
-    // savePlaylist(name, trackUris){
-    //     if(!name || !trackUris.length) { 
-    //         return
-    //     }
-    //     const accessToken = this.getAccessToken('playlist-modify-public');
-    //     const headers = { Authorization: `Bearer ${accessToken}` };
-    //     let username;
-    //     return fetch('https://api.spotify.com/v1/me', { headers: headers })
-    //     .then(response => response.json())
-    //     .then(jsonResponse => {
-    //         username = jsonResponse.id;
-    //         return fetch(`https://api.spotify.com/v1/users/${username}/playlists`, 
-    //         {
-    //             headers: headers,
-    //             method: 'POST',
-    //             body: JSON.stringify({ name: name })
-    //         })
-    //         .then(response => response.json())
-    //         .then(jsonResponse => {
-    //             const playlistId = jsonResponse.id
-    //             return fetch(`https://api.spotify.com/v1/users/${username}/playlists/${playlistId}/tracks`, 
-    //             {
-    //                 headers: headers, 
-    //                 method: 'POST',
-    //                 body: JSON.stringify({ uris: trackUris })
-    //             })
-    //         })
-    //     })
-    // }
-
     async add100TracksToPlaylist(trackURIs, headers, username, playlistId) {
         let start = 0, end = 99;
         let total = trackURIs.length;
@@ -238,12 +208,6 @@ const Spotify = {
                     body: JSON.stringify({ name: name })
                 })).json()).id;
         this.add100TracksToPlaylist(trackUris, headers, username, playlistId);
-        // return fetch(`https://api.spotify.com/v1/users/${username}/playlists/${playlistId}/tracks`, 
-        //     {
-        //         headers: headers, 
-        //         method: 'POST',
-        //         body: JSON.stringify({ uris: trackUris })
-        //     })
     }
 }
 
