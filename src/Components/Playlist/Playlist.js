@@ -8,7 +8,7 @@ class Playlist extends React.Component {
     }
 
     handleClick(event) {
-        this.props.onGetTracks(this.props.id)
+        this.props.onGetTracks(this.props.id, this.props.total)
     }
 
     render() {

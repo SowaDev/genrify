@@ -52,8 +52,19 @@ const Spotify = {
         })
     },
 
-    getTracks(playlistId) {
-        return this.fetchSpotify(`playlists/${playlistId}/tracks`, 'playlist-modify-public')
+    async getTracks(playlistId, total) {
+        let offset = 0;
+        const tracks = [];
+        do {
+            let part100Tracks = await this.get100Tracks(playlistId, offset);
+            tracks.push(part100Tracks)
+            offset += 100;
+        } while(offset < total)
+        return tracks.flat();
+    },
+
+    get100Tracks(playlistId, offset) {
+        return this.fetchSpotify(`playlists/${playlistId}/tracks?offset=${offset}`, 'playlist-modify-public')
         .then(response => {
             return response.json()
         }).then(jsonResponse => {

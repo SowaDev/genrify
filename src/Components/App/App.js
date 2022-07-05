@@ -166,8 +166,8 @@ class App extends React.Component {
                     playlistGenres: searchGenres });
   }
 
-  getTracks(tracksUri) {
-    Spotify.getTracks(tracksUri).then(tracks => {
+  getTracks(tracksUri, total) {
+    Spotify.getTracks(tracksUri, total).then(tracks => {
       return Spotify.getTracksGenres(tracks)
     }).then(tracksWithGenres => {
       this.setState({ searchResults: tracksWithGenres})
