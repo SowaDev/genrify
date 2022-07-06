@@ -24,6 +24,7 @@ class App extends React.Component {
     this.addGenres = this.addGenres.bind(this)
     this.removeTracksByGenre = this.removeTracksByGenre.bind(this)
     this.addAllTracks = this.addAllTracks.bind(this)
+    this.removeAllTracks = this.removeAllTracks.bind(this)
     // this.getTracksGenres = this.getTracksGenres.bind(this)
     // this.getPlaylistGenres = this.getPlaylistGenres.bind(this)
     this.state = {
@@ -120,6 +121,12 @@ class App extends React.Component {
     this.removeGenres(track)
   }
 
+  removeAllTracks() {
+    this.setState({
+      playlistTracks: [],
+      newPlaylistGenres: new Map() });
+  }
+
   updatePlaylistName(name){
     this.setState({ playlistName: name })
   }
@@ -211,7 +218,8 @@ class App extends React.Component {
                            tracks={this.state.playlistTracks}
                            onRemove={this.removeTrack} 
                            onNameChange={this.updatePlaylistName}
-                           onSave={this.savePlaylist} />
+                           onSave={this.savePlaylist}
+                           onRemoveAll={this.removeAllTracks} />
             </div>
           </div>
         </div>

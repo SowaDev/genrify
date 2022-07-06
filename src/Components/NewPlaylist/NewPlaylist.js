@@ -21,6 +21,12 @@ class NewPlaylist extends React.Component {
                         onChange={this.handleNameChange} />
                     <p>tracks: {this.props.tracks.length}</p>
                 </div>
+                <div className="Buttons">
+                    <button className="Remove-all"
+                            onClick={this.props.onRemoveAll}>
+                        Remove all
+                    </button>   
+                </div>
                 <TrackList tracks={this.props.tracks}
                            onRemove={this.props.onRemove}
                            isRemoval={true} />
