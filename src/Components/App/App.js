@@ -38,7 +38,7 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    Spotify.getAccessToken();
+    Spotify.getAccessToken('user-library-read');
     this.getPlaylists();
   }
 
