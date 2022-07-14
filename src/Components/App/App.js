@@ -26,8 +26,6 @@ class App extends React.Component {
     this.addAllTracks = this.addAllTracks.bind(this)
     this.removeAllTracks = this.removeAllTracks.bind(this)
     this.removePlaylist = this.removePlaylist.bind(this)
-    // this.getTracksGenres = this.getTracksGenres.bind(this)
-    // this.getPlaylistGenres = this.getPlaylistGenres.bind(this)
     this.state = {
       playlists: [],
       searchResults: [],
@@ -132,16 +130,6 @@ class App extends React.Component {
     this.setState({ playlistName: name })
   }
 
-  // savePlaylist(){
-  //   const trackURIs = this.state.playlistTracks.map(track => track.uri)
-  //   Spotify.savePlaylist(this.state.playlistName, trackURIs).then(() => {
-  //     this.setState({ 
-  //       playlistName: 'New Playlist',
-  //       playlistTracks: []
-  //     })
-  //   })
-  // }
-
   async savePlaylist() {
     const trackURIs = this.state.playlistTracks.map(track => track.uri);
     await Spotify.savePlaylist(this.state.playlistName, trackURIs);
@@ -158,12 +146,6 @@ class App extends React.Component {
       this.setState({ playlists: userPlaylists })
     })
   }
-
-  // search(term) {
-  //   Spotify.search(term).then(searchResults => {
-  //     this.setState({ searchResults: searchResults})
-  //   })
-  // }
 
   async search(term) {
     console.log(term)
@@ -191,14 +173,6 @@ class App extends React.Component {
     playlists = playlists.filter(playlist => playlist.id !== playlistId);
     this.setState({ playlists: playlists});
   }
-
-  // getPlaylistGenres(tracks) {
-  //   return Spotify.getPlaylistGenres(tracks)
-  // }
-
-  // getTracksGenres(tracks) {
-  //   return Spotify.getTracksGenres(tracks)
-  // }
 
   render() {
     return (

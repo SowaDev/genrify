@@ -128,18 +128,6 @@ const Spotify = {
         return jsonResponse.total;
     },
 
-    // getLikedTracks() {
-    //     let offset = 0;
-    //     const tracksPromises = [] 
-    //     return this.getLikedTracksTotal().then(total => {
-    //         do {
-    //             tracksPromises.push(this.get50LikedTracks(offset))
-    //             offset += 50;
-    //         } while(offset < total)
-    //         return Promise.all(tracksPromises)
-    //     }).then(result => result.flat())
-    // },
-
     async getLikedTracks() {
         let offset = 0;
         const tracks = [];
@@ -149,8 +137,6 @@ const Spotify = {
             tracks.push(part50Tracks)
             offset += 50;
         } while(offset < total)
-        // let result = tracks.flat()
-        // console.log(result)
         return tracks.flat();
     },
 
@@ -223,7 +209,6 @@ const Spotify = {
     },
 
     unfollowPlaylist(playlistId) {
-        // await this.fetchSpotify(`playlists/${playlistId}/followers`);
         const accessToken = this.getAccessToken('playlist-modify-public');
         const headers = { Authorization: `Bearer ${accessToken}` };
         return fetch(`https://api.spotify.com/v1/playlists/${playlistId}/followers`,
