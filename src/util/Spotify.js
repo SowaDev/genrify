@@ -220,6 +220,17 @@ const Spotify = {
                     body: JSON.stringify({ name: name })
                 })).json()).id;
         this.add100TracksToPlaylist(trackUris, headers, username, playlistId);
+    },
+
+    unfollowPlaylist(playlistId) {
+        // await this.fetchSpotify(`playlists/${playlistId}/followers`);
+        const accessToken = this.getAccessToken('playlist-modify-public');
+        const headers = { Authorization: `Bearer ${accessToken}` };
+        return fetch(`https://api.spotify.com/v1/playlists/${playlistId}/followers`,
+            {
+                headers: headers,
+                method: 'DELETE'
+            })
     }
 }
 

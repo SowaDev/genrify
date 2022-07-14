@@ -14,10 +14,31 @@
     height: 1.8rem;
   }
 
+  .Remove-button {
+    cursor: pointer;
+    border-radius: 54px;
+    border-width: 0px;
+    background-color: rgba(1, 12, 63, 0.7);
+    text-align: center;
+    font-size: .83rem;
+    transition: background-color .25s;
+    color: #fff;
+    font-weight: 500;
+    visibility: hidden;
+  }
+
+  .Rightside {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
   p {
+    margin-right: 1rem;
     font-size: .83rem;
     font-weight: 300;
     color: rgba(256, 256, 256, 0.8);
+    text-align: left;
   }
 
   .Playlist h3:hover {

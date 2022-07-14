@@ -29,7 +29,8 @@ class PlaylistBar extends React.Component {
                 <PlaylistList playlists={this.props.playlists}
                               likedTracksTotal={this.state.likedTracksTotal} 
                               onGetTracks={this.props.onGetTracks}
-                              onGetLikedTracks={this.props.onGetLikedTracks} />
+                              onGetLikedTracks={this.props.onGetLikedTracks}
+                              onRemove={this.props.onRemove} />
             </div>
         )
     }

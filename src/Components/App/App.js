@@ -25,6 +25,7 @@ class App extends React.Component {
     this.removeTracksByGenre = this.removeTracksByGenre.bind(this)
     this.addAllTracks = this.addAllTracks.bind(this)
     this.removeAllTracks = this.removeAllTracks.bind(this)
+    this.removePlaylist = this.removePlaylist.bind(this)
     // this.getTracksGenres = this.getTracksGenres.bind(this)
     // this.getPlaylistGenres = this.getPlaylistGenres.bind(this)
     this.state = {
@@ -184,6 +185,13 @@ class App extends React.Component {
     })
   }
 
+  async removePlaylist(playlistId) {
+    await Spotify.unfollowPlaylist(playlistId);
+    let playlists = this.state.playlists;
+    playlists = playlists.filter(playlist => playlist.id !== playlistId);
+    this.setState({ playlists: playlists});
+  }
+
   // getPlaylistGenres(tracks) {
   //   return Spotify.getPlaylistGenres(tracks)
   // }
@@ -202,7 +210,10 @@ class App extends React.Component {
           <div className="Filters">
             <PlaylistBar playlists={this.state.playlists}
                          onGetTracks={this.getTracks}
-                         onGetLikedTracks={this.getLikedTracks} />
+                         onGetLikedTracks={this.getLikedTracks}
+                         onRemove={this.removePlaylist}
+                        //  isHovering={false}
+                          />
             <GenreBar playlistGenres={this.state.playlistGenres}
                       newPlaylistGenres={this.state.newPlaylistGenres}
                       onAddGenre={this.addTracksByGenre} />
