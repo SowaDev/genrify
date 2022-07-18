@@ -19,7 +19,8 @@ class PlaylistList extends React.Component {
                                          tracks={playlist.tracks}
                                          total={playlist.total}
                                          onGetTracks={this.props.onGetTracks}
-                                         onRemove={this.props.onRemove} />
+                                         onRemove={this.props.onRemove}
+                                          />
                     })
                 }
             </div>
