@@ -1,0 +1,44 @@
+/* .Overlay-div {
+    position: 'fixed';
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: 'rgba(0, 0, 0, .7)';
+    z-index: 1000;
+}
+
+.Modal {
+    position: 'fixed';
+    top: '50%';
+    left: '50%';
+    transform: 'translate(-50%, -50%)';
+    background-color:rgb(71, 10, 133);
+    padding: '50px';
+    z-index: 1000;
+} */
+
+.Buttonz {
+    display: flex;
+    justify-content: space-around;
+}
+
+.mButton {
+    cursor: pointer;
+    width: 4rem;
+    padding: .77rem 0;
+    border-radius: 36px;
+    background-color: #010c3f;
+    text-align: center;
+    font-size: .833rem;
+    transition: background-color .25s;
+    border: 0px;
+    color: #fff;
+    font-weight: 500;
+}
+
+.mText {
+    font-size: 1rem;
+    font-weight: bold;
+    margin: 1rem;
+}

@@ -1,12 +1,14 @@
 import React from 'react'
 import ReactDom from 'react-dom'
+import './Modal.css'
 
 const MODAL_STYLES = {
   position: 'fixed',
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  backgroundColor: "#FFF",
+  color: 'white',
+  backgroundColor: "rgba(71, 10, 133)",
   padding: '50px',
   zIndex: 1000
 }
@@ -36,11 +38,15 @@ export default function Modal({ isModalOpen, toggleModal, onYes, children }) {
 
   return ReactDom.createPortal(
     <>
-      <div style={OVERLAY_STYLES} />
+      {/* <div portalClassName="Overlay-div" />
+      <div portalClassName="Modal"> */}
+      <div  style={OVERLAY_STYLES} />
       <div style={MODAL_STYLES}>
-        {children}
-        <button onClick={handleYes}>Yes</button>
-        <button onClick={handleNo}>No</button>
+        <p className='mText'>{children}</p>
+        <div className="Buttonz">
+          <button onClick={handleYes} className="mButton">Yes</button>
+          <button onClick={handleNo} className="mButton">No</button>
+        </div>
       </div>
     </>,
     document.getElementById('portal') 
