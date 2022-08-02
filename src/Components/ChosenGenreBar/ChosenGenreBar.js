@@ -2,19 +2,15 @@ import React from 'react'
 import './ChosenGenreBar.css'
 import GenreList from '../GenreList/GenreList'
 
-class ChosenGenreBar extends React.Component {
+export default function ChosenGenreBar(props) {
+    const { genres, onRemoveGenre } = props;
 
-    render() {
-        return(
+    return(
         <div className='ChosenGenreBar'>
             <h2>Added Genres</h2>
-            <GenreList genres={this.props.genres}
-                       onRemoveGenre={this.props.onRemoveGenre}
+            <GenreList genres={genres}
+                       onRemoveGenre={onRemoveGenre}
                        isRemoval={true} />
         </div>
         )
-    }
-    
 }
-
-export default ChosenGenreBar

@@ -2,41 +2,31 @@ import React from 'react';
 import './NewPlaylist.css'
 import TrackList from '../TrackList/TrackList'
 
-class NewPlaylist extends React.Component {
-    constructor(props) {
-        super(props)
-        this.handleNameChange = this.handleNameChange.bind(this)
-    }
+export default function NewPlaylist(props) {
+    const { name, tracks, onRemove, onNameChange, onSave, onRemoveAll } = props;
 
-    handleNameChange(event) {
-        let newName = event.target.value
-        this.props.onNameChange(newName)
-    }
+    const handleNameChange = ({ target }) => onNameChange(target.value)
 
-    render() {
-        return(
-            <div className="NewPlaylist">
-                <div className="Playlist-information">
-                    <input defaultValue={'New Playlist'}
-                        onChange={this.handleNameChange} />
-                    <p>tracks: {this.props.tracks.length}</p>
-                </div>
-                <div className="Buttons">
-                    <button className="Remove-all"
-                            onClick={this.props.onRemoveAll}>
-                        Remove all
-                    </button>   
-                </div>
-                <TrackList tracks={this.props.tracks}
-                           onRemove={this.props.onRemove}
-                           isRemoval={true} />
-                <button className="Playlist-save"
-                        onClick={this.props.onSave}>
-                    SAVE TO SPOTIFY
-                </button>
+    return(
+        <div className="NewPlaylist">
+            <div className="Playlist-information">
+                <input defaultValue={'New Playlist'}
+                    onChange={handleNameChange} />
+                <p>tracks: {tracks.length}</p>
             </div>
-        )
-    }
+            <div className="Buttons">
+                <button className="Remove-all"
+                        onClick={onRemoveAll}>
+                    Remove all
+                </button>   
+            </div>
+            <TrackList tracks={tracks}
+                       onRemove={onRemove}
+                       isRemoval={true} />
+            <button className="Playlist-save"
+                    onClick={onSave}>
+                SAVE TO SPOTIFY
+            </button>
+        </div>
+    )
 }
-
-export default NewPlaylist

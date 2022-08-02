@@ -1,6 +1,37 @@
 import React from 'react'
 import './Playlist.css'
 
+export default function Playlist(props) {
+    const { name, id, tracks, total, onGetTracks, onRemove } = props;
+
+    const handleClick = () => onGetTracks(id, total);
+
+    const handleHover = () => document.getElementById(id).style.visibility = 'visible';
+
+    const handleLeave = () => document.getElementById(id).style.visibility = 'hidden';
+
+    return(
+        <div className='Playlist'
+             onMouseOver={handleHover}
+             onMouseOut={handleLeave} >
+            <div className='Playlist-information'>
+                <h3 onClick={handleClick}>{name}</h3>
+                <div className='Rightside'>
+                    <p>tracks: {total}</p>
+                    <button className='Remove-button'
+                            id={id}
+                            onClick={() => onRemove(id, name)}
+                            >x</button>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+/* 47
+import React from 'react'
+import './Playlist.css'
+
 class Playlist extends React.Component {
     constructor(props) {
         super(props)
@@ -44,4 +75,4 @@ class Playlist extends React.Component {
     }
 }
 
-export default Playlist
+export default Playlist */

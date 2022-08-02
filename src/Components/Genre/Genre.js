@@ -1,27 +1,20 @@
 import React from 'react'
 import './Genre.css'
 
-class Genre extends React.Component {
-    constructor(props) {
-        super(props)
-        this.handleClick = this.handleClick.bind(this)
-    }
+export default function Genre(props) {
+    const { name, quantity, onAddGenre, onRemoveGenre, isRemoval } = props;
 
-    handleClick(event) {
-        if(this.props.isRemoval)
-            this.props.onRemoveGenre(this.props.name)
+    const handleClick = () => {
+        if(isRemoval)
+            onRemoveGenre(name)
         else
-            this.props.onAddGenre(this.props.name)
+            onAddGenre(name)
     }
 
-    render() {
-        return(
+    return (
         <button className="GenreButton"
-            onClick={this.handleClick}>
-            {this.props.name} | {this.props.quantity}
+            onClick={handleClick}>
+            {name} | {quantity}
         </button>
-        )
-    }
+    )
 }
-
-export default Genre

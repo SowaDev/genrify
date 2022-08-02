@@ -26,11 +26,13 @@ const OVERLAY_STYLES = {
 export default function Modal({ isModalOpen, toggleModal, onYes, children }) {
 
   const handleYes = () => {
+    console.log('handle Yes')
     onYes();
     toggleModal();
   }
 
   const handleNo = () => {
+    console.log('handle No')
     toggleModal();
   }
 
