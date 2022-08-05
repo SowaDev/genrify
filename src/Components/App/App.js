@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import SearchBar from '../SearchBar/SearchBar'
 import SearchResults from '../SearchResults/SearchResults'
@@ -8,208 +8,146 @@ import PlaylistBar from '../PlaylistBar/PlaylistBar';
 import GenreBar from '../GenreBar/GenreBar';
 import ChosenGenreBar from '../ChosenGenreBar/ChosenGenreBar';
 
-class App extends React.Component {
-  constructor(props){
-    super(props)
-    this.addTrack = this.addTrack.bind(this)
-    this.removeTrack = this.removeTrack.bind(this)
-    this.updatePlaylistName = this.updatePlaylistName.bind(this)
-    this.savePlaylist = this.savePlaylist.bind(this)
-    this.search = this.search.bind(this)
-    this.getPlaylists = this.getPlaylists.bind(this)
-    this.getTracks = this.getTracks.bind(this)
-    this.getLikedTracks = this.getLikedTracks.bind(this)
-    this.addTracksByGenre = this.addTracksByGenre.bind(this)
-    this.removeGenres = this.removeGenres.bind(this)
-    this.addGenres = this.addGenres.bind(this)
-    this.removeTracksByGenre = this.removeTracksByGenre.bind(this)
-    this.addAllTracks = this.addAllTracks.bind(this)
-    this.removeAllTracks = this.removeAllTracks.bind(this)
-    this.removePlaylist = this.removePlaylist.bind(this)
-    this.state = {
-      playlists: [],
-      searchResults: [],
-      playlistName: '',
-      playlistTracks: [],
-      playlistGenres: new Map(),
-      newPlaylistGenres: new Map()
-    }
-  }
-
-  componentDidMount() {
+export default function App() {
+  const [playlists, setPlaylists] = useState([]);
+  const [searchResults, setSearchResults] = useState([]);
+  const [playlistName, setPlaylistName] = useState('');
+  const [playlistTracks, setPlaylistTracks] = useState([]);
+  const [playlistGenres, setPlaylistGenres] = useState(new Map());
+  const [newPlaylistGenres, setNewPlaylistGenres] = useState(new Map());
+  
+  useEffect(() => {
     Spotify.getAccessToken('user-library-read');
-    this.getPlaylists();
+    getPlaylists();
+  }, [])
+  
+  const getLikedTracks = async() => {
+    let tracks = await Spotify.getTracksGenres(await Spotify.getLikedTracks());
+    setSearchResults(tracks);
+    setPlaylistGenres(await Spotify.getPlaylistGenres(tracks));
   }
 
-  getLikedTracks() {
-    Spotify.getLikedTracks().then(likedTracks => {
-      return Spotify.getTracksGenres(likedTracks)
-    }).then(tracksWithGenres => {
-      this.setState({ searchResults: tracksWithGenres })
-      return Spotify.getPlaylistGenres(tracksWithGenres)
-    }).then(genres => {
-      this.setState({ playlistGenres: genres})
-    })
+  const addTracksByGenre = (genre) => {
+    let tracksToAdd = searchResults.filter(track => track.genres.includes(genre) && !playlistTracks.includes(track));
+    setPlaylistTracks((tracks) => [...tracks, ...tracksToAdd]);
+    tracksToAdd.forEach(track => addGenres(track));
   }
 
-  addTracksByGenre(genre) {
-    let playlist = this.state.playlistTracks;
-    let tracksToAdd = this.state.searchResults.filter(track => track.genres.includes(genre))
-    tracksToAdd.forEach(track => {
-      if(!playlist.includes(track)) {
-        this.addGenres(track)
-        playlist.push(track)
-      }
-    })
-    this.setState({ playlistTracks: playlist })
+  const removeTracksByGenre = (genre) => {
+    let removed = playlistTracks.filter(track => track.genres.includes(genre));
+    removed.forEach(track => removeGenres(track));
+    setPlaylistTracks(playlistTracks.filter(track => !track.genres.includes(genre)));
   }
 
-  removeTracksByGenre(genre) {
-    let playlist = this.state.playlistTracks;
-    let removed = playlist.filter(track => track.genres.includes(genre));
-    removed.forEach(track => this.removeGenres(track));
-    playlist = playlist.filter(track => !track.genres.includes(genre));
-    this.setState({ playlistTracks: playlist });
-  }
-
-  removeGenres(track) {
-    let chosenGenres = this.state.newPlaylistGenres
+  const removeGenres = (track) => {
+    let chosenGenres = newPlaylistGenres;
     track.genres.forEach(genre => {
-      if(chosenGenres.get(genre) != 1)
-        chosenGenres.set(genre, chosenGenres.get(genre) - 1)
+      if(chosenGenres.get(genre) !== 1)
+        chosenGenres.set(genre, chosenGenres.get(genre) - 1);
       else
-        chosenGenres.delete(genre)
+        chosenGenres.delete(genre);
     })
-    this.setState({ newPlaylistGenres: chosenGenres })
+    setNewPlaylistGenres(chosenGenres);
   }
 
-  addGenres(track){
-    let chosenGenres = this.state.newPlaylistGenres;
+  const addGenres = (track) => {
+    let chosenGenres = newPlaylistGenres;
     track.genres.forEach(genre => {
       if(!chosenGenres.has(genre))
         chosenGenres.set(genre, 1)
       else
         chosenGenres.set(genre, chosenGenres.get(genre) + 1)
     })
-    this.setState({ newPlaylistGenres: chosenGenres })
+    setNewPlaylistGenres(chosenGenres);
   }
 
-  addAllTracks() {
-    let tracks = this.state.searchResults;
-    let genres = this.state.playlistGenres;
-    this.setState({
-      playlistTracks: tracks,
-      newPlaylistGenres: genres
-    });
+  const addAllTracks = () => {
+    setPlaylistTracks(searchResults);
+    setNewPlaylistGenres(playlistGenres);
   }
-  
-  addTrack(track){
-    let playlist = this.state.playlistTracks
-    if(playlist.find(savedTrack => savedTrack.id === track.id)){
+
+  const addTrack = (track) => {
+    if(playlistTracks.find(savedTrack => savedTrack.id === track.id))
       return;
-    }
-    playlist.push(track)
-    this.addGenres(track)
-    this.setState({ playlistTracks: playlist })
+    setPlaylistTracks((tracks) => [...tracks, track]);
+    addGenres(track);
   }
 
-  removeTrack(track){
-    let playlist = this.state.playlistTracks
-    playlist = playlist.filter(savedTrack => savedTrack.id !== track.id)
-    this.setState({ playlistTracks: playlist})
-    this.removeGenres(track)
+  const removeTrack = (track) => {
+    setPlaylistTracks(playlistTracks.filter(savedTrack => savedTrack.id !== track.id));
+    removeGenres(track);
   }
 
-  removeAllTracks() {
-    this.setState({
-      playlistTracks: [],
-      newPlaylistGenres: new Map() });
+  const removeAllTracks = () => {
+    setPlaylistTracks([]);
+    setNewPlaylistGenres(new Map());
   }
 
-  updatePlaylistName(name){
-    this.setState({ playlistName: name })
+  const updatePlaylistName = (text) => setPlaylistName(text);
+
+  const savePlaylist = async() => {
+    const trackURIs = playlistTracks.map(track => track.uri);
+    await Spotify.savePlaylist(playlistName, trackURIs);
+    setPlaylistName('');
+    setPlaylistTracks([]);
+    setNewPlaylistGenres(new Map());
+    getPlaylists();
   }
 
-  async savePlaylist() {
-    const trackURIs = this.state.playlistTracks.map(track => track.uri);
-    await Spotify.savePlaylist(this.state.playlistName, trackURIs);
-    this.setState({
-      playlistName: "",
-      playlistTracks: [],
-      newPlaylistGenres: []
-    })
-    this.getPlaylists();
+  const getPlaylists = async() => {
+    setPlaylists(await Spotify.getPlaylists());
   }
 
-  getPlaylists() {
-    Spotify.getPlaylists().then(userPlaylists => {
-      this.setState({ playlists: userPlaylists })
-    })
+  const search = async(term) => {
+    let tracks = await Spotify.search(term);
+    let tracksWithGenres = await Spotify.getTracksGenres(tracks);
+    let genres = await Spotify.getPlaylistGenres(tracksWithGenres);
+    setSearchResults(tracksWithGenres);
+    setPlaylistGenres(genres);
   }
 
-  async search(term) {
-    console.log(term)
-    let searchResults = await Spotify.search(term);
-    searchResults = await Spotify.getTracksGenres(searchResults);
-    let searchGenres = await Spotify.getPlaylistGenres(searchResults);
-    this.setState({ searchResults: searchResults,
-                    playlistGenres: searchGenres });
+  const getTracks = async(tracksUri, total) => {
+    let tracks = await Spotify.getTracksGenres(await Spotify.getTracks(tracksUri, total));
+    setSearchResults(tracks);
+    setPlaylistGenres(await Spotify.getPlaylistGenres(tracks));
   }
 
-  getTracks(tracksUri, total) {
-    Spotify.getTracks(tracksUri, total).then(tracks => {
-      return Spotify.getTracksGenres(tracks)
-    }).then(tracksWithGenres => {
-      this.setState({ searchResults: tracksWithGenres})
-      return Spotify.getPlaylistGenres(tracksWithGenres)
-    }).then(genres => {
-      this.setState({ playlistGenres: genres })
-    })
-  }
-
-  async removePlaylist(playlistId) {
+  const removePlaylist = async(playlistId) => {
     await Spotify.unfollowPlaylist(playlistId);
-    let playlists = this.state.playlists;
-    playlists = playlists.filter(playlist => playlist.id !== playlistId);
-    this.setState({ playlists: playlists});
+    getPlaylists();
   }
 
-  render() {
-    return (
-      <div>
-        <h1>Ja<span className="highlight">mmm</span>ing</h1>
-        <div className="App">
-          <SearchBar onSearch={this.search} />
-          <div className="Filters">
-            <PlaylistBar playlists={this.state.playlists}
-                         onGetTracks={this.getTracks}
-                         onGetLikedTracks={this.getLikedTracks}
-                         onRemove={this.removePlaylist}
-                        //  isHovering={false}
-                          />
-            <GenreBar playlistGenres={this.state.playlistGenres}
-                      newPlaylistGenres={this.state.newPlaylistGenres}
-                      onAddGenre={this.addTracksByGenre} />
-          </div>
-          <div className="Tracks">
-            <SearchResults results={this.state.searchResults} 
-                           onAdd={this.addTrack}
-                           onAddAll={this.addAllTracks} />
-            <div className="New-playlist">
-              <ChosenGenreBar genres={this.state.newPlaylistGenres}
-                              onRemoveGenre={this.removeTracksByGenre} />
-              <NewPlaylist name={this.state.playlistName} 
-                           tracks={this.state.playlistTracks}
-                           onRemove={this.removeTrack} 
-                           onNameChange={this.updatePlaylistName}
-                           onSave={this.savePlaylist}
-                           onRemoveAll={this.removeAllTracks} />
-            </div>
+  return (
+    <div>
+      <h1>Ja<span className="highlight">mmm</span>ing</h1>
+      <div className="App">
+        <SearchBar onSearch={search} />
+        <div className="Filters">
+          <PlaylistBar playlists={playlists}
+                       onGetTracks={getTracks}
+                       onGetLikedTracks={getLikedTracks}
+                       onRemove={removePlaylist}
+                        />
+          <GenreBar playlistGenres={playlistGenres}
+                    newPlaylistGenres={newPlaylistGenres}
+                    onAddGenre={addTracksByGenre} />
+        </div>
+        <div className="Tracks">
+          <SearchResults results={searchResults} 
+                         onAdd={addTrack}
+                         onAddAll={addAllTracks} />
+          <div className="New-playlist">
+            <ChosenGenreBar genres={newPlaylistGenres}
+                            onRemoveGenre={removeTracksByGenre} />
+            <NewPlaylist name={playlistName} 
+                         tracks={playlistTracks}
+                         onRemove={removeTrack} 
+                         onNameChange={updatePlaylistName}
+                         onSave={savePlaylist}
+                         onRemoveAll={removeAllTracks} />
           </div>
         </div>
       </div>
-    )
-  }
+    </div>
+  )
 }
-
-export default App;
