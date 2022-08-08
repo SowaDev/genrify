@@ -34,23 +34,31 @@ const Spotify = {
         }
     },
 
-    search(term) {
-        return this.fetchSpotify(`search?type=track&q=${term}`, 'playlist-modify-public')
-        .then(response => {
-            return response.json()
-        }).then(jsonResponse => {
-            if(!jsonResponse)
-                return []
-            return jsonResponse.tracks.items.map(track => ({
-                id: track.id,
-                name: track.name,
-                artist: track.artists[0].name,
-                artistId: track.artists[0].id,
-                genres: [],
-                album: track.album.name,
-                uri: track.uri
-            }))
-        })
+    async search(term) {
+        let response = await (await this.fetchSpotify(`search?type=track&q=${term}`, 'playlist-modify-public')).json();
+        if(!response)
+            return [];
+        return response.tracks.items.map(track => ({
+            id: track.id,
+            name: track.name,
+            artist: track.artists[0].name,
+            artistId: track.artists[0].id,
+            genres: [],
+            album: track.album.name,
+            uri: track.uri
+        }))
+    },
+
+    getTrackDetails(item) {
+        return {
+            id: item.track.id,
+            name: item.track.name,
+            artist: item.track.artists[0].name,
+            artistId: item.track.artists[0].id,
+            genres: [],
+            album: item.track.album.name,
+            uri: item.track.uri
+        }
     },
 
     async getTracks(playlistId, total) {
@@ -64,68 +72,37 @@ const Spotify = {
         return tracks.flat();
     },
 
-    get100Tracks(playlistId, offset) {
-        return this.fetchSpotify(`playlists/${playlistId}/tracks?offset=${offset}`, 'playlist-modify-public')
-        .then(response => {
-            return response.json()
-        }).then(jsonResponse => {
-            if(!jsonResponse)
-                return []
-            return jsonResponse.items.map(item => ({
-                id: item.track.id,
-                name: item.track.name,
-                artist: item.track.artists[0].name,
-                artistId: item.track.artists[0].id,
-                genres: [],
-                album: item.track.album.name,
-                uri: item.track.uri
-            }))
-        })
+    async get100Tracks(playlistId, offset) {
+        let response = await (await this.fetchSpotify(`playlists/${playlistId}/tracks?offset=${offset}`, 'playlist-modify-public')).json();
+        if(!response)
+            return [];
+        return response.items.map(item => this.getTrackDetails(item))
     },
 
-    getPlaylists() {
-        return this.fetchSpotify('me', 'playlist-modify-public')
-        .then(response => response.json())
-        .then(jsonResponse => {
-            let username = jsonResponse.id
-            return this.fetchSpotify(`users/${username}/playlists`, 'playlist-modify-public')
-            .then(response => response.json())
-            .then(jsonResponse => {
-                if(!jsonResponse)
-                    return []
-                return jsonResponse.items.map(playlist => ({
-                    id: playlist.id,
-                    name: playlist.name,
-                    tracksUri: playlist.tracks.href,
-                    total: playlist.tracks.total
-                }))
-            })
-        })
+    async getPlaylists() {
+        let user = await (await this.fetchSpotify('me', 'playlist-modify-public')).json();
+        let response = await (await this.fetchSpotify(`users/${user.id}/playlists`, 'playlist-modify-public')).json();
+        if(!response)
+            return [];
+        return response.items.map(playlist => ({
+            id: playlist.id,
+            name: playlist.name,
+            tracksUri: playlist.tracks.href,
+            total: playlist.tracks.total
+        }))
     },
 
-    get50LikedTracks(offset) {
-        return this.fetchSpotify(`me/tracks?offset=${offset}&limit=50`, 'user-library-read')
-        .then(response => {
-            return response.json()
-        }).then(jsonResponse => {
-            if(!jsonResponse)
-                return []
-            return jsonResponse.items.map(item => ({
-                id: item.track.id,
-                name: item.track.name,
-                artist: item.track.artists[0].name,
-                artistId: item.track.artists[0].id,
-                genres: [],
-                album: item.track.album.name,
-                uri: item.track.uri
-            }))
-        })
+
+    async get50LikedTracks(offset) {
+        let response = await (await this.fetchSpotify(`me/tracks?offset=${offset}&limit=50`, 'user-library-read')).json();
+        if(!response)
+            return [];
+        return response.items.map(item => this.getTrackDetails(item))
     },
 
     async getLikedTracksTotal() {
-        const response = await this.fetchSpotify(`me/tracks`);
-        const jsonResponse = await response.json();
-        return jsonResponse.total;
+        const response = await (await this.fetchSpotify(`me/tracks`)).json();
+        return response.total;
     },
 
     async getLikedTracks() {
@@ -140,19 +117,12 @@ const Spotify = {
         return tracks.flat();
     },
 
-    getGenreByArtist(artistId) {
-        return this.fetchSpotify(`artists/${artistId}`, 'playlist-modify-public')
-        .then(response => {
-            return response.json();
-        }).then(jsonResponse => {
-            if(!jsonResponse)
-                return []
-            // let result = jsonResponse.genres
-            // if(result === [])
-            //     result = ['none']
-            return jsonResponse.genres;
-        })
-    },
+    async getGenreByArtist(artistId) {
+        let response = await (await this.fetchSpotify(`artists/${artistId}`, 'playlist-modify-public')).json();
+        if(!response)
+            return [];
+        return response.genres;
+    },  
 
     async getTracksGenres(tracks) {
         await Promise.all(tracks.map(async (track) => {
