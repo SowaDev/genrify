@@ -15,6 +15,10 @@ export default function NewPlaylist(props) {
                 <p>tracks: {tracks.length}</p>
             </div>
             <div className="Buttons">
+                <button className="Playlist-save"
+                        onClick={onSave}>
+                    SAVE TO SPOTIFY
+                </button>
                 <button className="Remove-all"
                         onClick={onRemoveAll}>
                     Remove all
@@ -23,10 +27,6 @@ export default function NewPlaylist(props) {
             <TrackList tracks={tracks}
                        onRemove={onRemove}
                        isRemoval={true} />
-            <button className="Playlist-save"
-                    onClick={onSave}>
-                SAVE TO SPOTIFY
-            </button>
         </div>
     )
 }
