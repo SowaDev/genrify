@@ -1,13 +1,10 @@
 .GenreBar {
-    /* width: 50%; */
+    width: 30%;
     height: 300px;
     overflow-y: scroll;
     padding: .88rem;
     background-color: rgba(1, 12, 63, 0.7);
     box-shadow: 0 4px 2px 2px #000000;
-    margin: .88rem 0;
-    /* padding: 2.27rem 1.16rem; */
-    width: 37%;
   }
 
   ::-webkit-scrollbar {

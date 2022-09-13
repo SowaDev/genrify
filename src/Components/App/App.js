@@ -131,21 +131,19 @@ export default function App() {
           <GenreBar playlistGenres={playlistGenres}
                     newPlaylistGenres={newPlaylistGenres}
                     onAddGenre={addTracksByGenre} />
+          <ChosenGenreBar genres={newPlaylistGenres}
+                            onRemoveGenre={removeTracksByGenre} />
         </div>
         <div className="Tracks">
           <SearchResults results={searchResults} 
                          onAdd={addTrack}
                          onAddAll={addAllTracks} />
-          <div className="New-playlist">
-            <ChosenGenreBar genres={newPlaylistGenres}
-                            onRemoveGenre={removeTracksByGenre} />
             <NewPlaylist name={playlistName} 
                          tracks={playlistTracks}
                          onRemove={removeTrack} 
                          onNameChange={updatePlaylistName}
                          onSave={savePlaylist}
                          onRemoveAll={removeAllTracks} />
-          </div>
         </div>
       </div>
     </div>
