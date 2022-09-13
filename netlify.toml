@@ -3,6 +3,12 @@
   command = "CI=false npm run build"
   functions = "netlify/functions"
   publish = "build"
+  base = "/"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
 
   ## Uncomment to use this redirect for Single Page Applications like create-react-app.
   ## Not needed for static site generators.
