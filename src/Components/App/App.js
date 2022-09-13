@@ -121,7 +121,7 @@ export default function App() {
     <div>
       <div className="App">
         <h1>
-          Genrify
+          Genrif
           <SearchBar onSearch={search} />
         </h1>
         <div className="Filters">
