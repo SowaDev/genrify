@@ -9,12 +9,14 @@ html {
 }
 
 h1 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   padding: .77rem 0;
-  background-color: #010c3f;
   text-align: center;
   font-family: 'Poppins', sans-serif;
-  font-size: 1.88rem;
-  color: #fff;
+  font-size: 2.23rem;
+  color: rgb(0, 0, 0);
 }
 
 h1 .highlight {
@@ -29,7 +31,7 @@ h2 {
 .App {
   height: 100%;
   padding: 0 10% 0% 10%;
-  background-image: url('./background_photo_desktop.jpg');
+  background-image: url('./blue2.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

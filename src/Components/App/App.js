@@ -19,7 +19,7 @@ export default function App() {
   useEffect(() => {
     Spotify.getAccessToken('user-library-read');
     getPlaylists();
-  }, [])
+  })
   
   const getLikedTracks = async() => {
     let tracks = await Spotify.getTracksGenres(await Spotify.getLikedTracks());
@@ -119,9 +119,11 @@ export default function App() {
 
   return (
     <div>
-      <h1>Ja<span className="highlight">mmm</span>ing</h1>
       <div className="App">
-        <SearchBar onSearch={search} />
+        <h1>
+          Genrify
+          <SearchBar onSearch={search} />
+        </h1>
         <div className="Filters">
           <PlaylistBar playlists={playlists}
                        onGetTracks={getTracks}
