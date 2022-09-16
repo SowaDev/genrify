@@ -19,7 +19,7 @@ export default function App() {
   useEffect(() => {
     Spotify.getAccessToken('user-library-read');
     getPlaylists();
-  })
+  }, [])
   
   const getLikedTracks = async() => {
     let tracks = await Spotify.getTracksGenres(await Spotify.getLikedTracks());
