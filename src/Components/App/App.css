@@ -11,8 +11,7 @@ html {
 h1 {
   display: flex;
   justify-content: center;
-  align-items: center;
-  padding: .77rem 0;
+  padding: 1.44rem 0;
   text-align: center;
   font-family: 'Poppins', sans-serif;
   font-size: 2.23rem;
