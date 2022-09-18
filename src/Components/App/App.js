@@ -87,11 +87,13 @@ export default function App() {
 
   const savePlaylist = async() => {
     const trackURIs = playlistTracks.map(track => track.uri);
-    await Spotify.savePlaylist(playlistName, trackURIs);
+    let newPlaylist = await Spotify.savePlaylist(playlistName, trackURIs);
     setPlaylistName('');
     setPlaylistTracks([]);
     setNewPlaylistGenres(new Map());
-    getPlaylists();
+    setPlaylists((prev) => {
+      return [newPlaylist, ...prev]
+    })
   }
 
   const getPlaylists = async() => {

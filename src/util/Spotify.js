@@ -2,6 +2,7 @@ import TrackList from "../Components/TrackList/TrackList";
 
 let accessToken;
 const clientID = 'db19cb1182f140fab5eb77bcecedcd12'
+// const redirectUrl = 'http://localhost:3000/'
 const redirectUrl = 'https://genrify.netlify.app'
 
 const Spotify = {
@@ -146,7 +147,7 @@ const Spotify = {
         return playlistGenres;  
       },
 
-    async add100TracksToPlaylist(trackURIs, headers, username, playlistId) {
+    async addTracksToSavedPlaylist(trackURIs, headers, username, playlistId) {
         let start = 0, end = 99;
         let total = trackURIs.length;
         while (total > start) {
@@ -169,13 +170,19 @@ const Spotify = {
         const accessToken = this.getAccessToken('playlist-modify-public');
         const headers = { Authorization: `Bearer ${accessToken}` };
         const username = (await (await fetch('https://api.spotify.com/v1/me', { headers: headers })).json()).id;
-        const playlistId = (await (await fetch(`https://api.spotify.com/v1/users/${username}/playlists`, 
+        const response = await (await fetch(`https://api.spotify.com/v1/users/${username}/playlists`, 
                 {
                     headers: headers,
                     method: 'POST',
                     body: JSON.stringify({ name: name })
-                })).json()).id;
-        this.add100TracksToPlaylist(trackUris, headers, username, playlistId);
+                })).json();
+        this.addTracksToSavedPlaylist(trackUris, headers, username, response.id);
+        return {
+            id: response.id,
+            name: name,
+            tracksUri: response.tracks.href,
+            total: trackUris.length
+        }
     },
 
     unfollowPlaylist(playlistId) {
