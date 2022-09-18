@@ -20,6 +20,11 @@ export default function App() {
     Spotify.getAccessToken('user-library-read');
     getPlaylists();
   }, [])
+
+  const getPlaylists = async() => {
+    setPlaylists(await Spotify.getPlaylists());
+    console.log(playlists);
+  }
   
   const getLikedTracks = async() => {
     let tracks = await Spotify.getTracksGenres(await Spotify.getLikedTracks());
@@ -96,10 +101,6 @@ export default function App() {
     })
   }
 
-  const getPlaylists = async() => {
-    setPlaylists(await Spotify.getPlaylists());
-  }
-
   const search = async(term) => {
     let tracks = await Spotify.search(term);
     let tracksWithGenres = await Spotify.getTracksGenres(tracks);
@@ -120,7 +121,6 @@ export default function App() {
   }
 
   return (
-    <div>
       <div className="App">
         <h1>
           Genrify
@@ -150,6 +150,5 @@ export default function App() {
                          onRemoveAll={removeAllTracks} />
         </div>
       </div>
-    </div>
   )
 }
