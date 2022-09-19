@@ -2,8 +2,8 @@ import TrackList from "../Components/TrackList/TrackList";
 
 let accessToken;
 const clientID = 'db19cb1182f140fab5eb77bcecedcd12'
-// const redirectUrl = 'http://localhost:3000/'
-const redirectUrl = 'https://genrify.netlify.app'
+const redirectUrl = 'http://localhost:3000/'
+// const redirectUrl = 'https://genrify.netlify.app'
 
 const Spotify = {
 
@@ -13,6 +13,11 @@ const Spotify = {
         { headers: {
             Authorization: `Bearer ${token}`
         }})
+    },
+
+    async getUser() {
+        const user = await (await this.fetchSpotify('me', 'playlist-modify-public')).json();
+        return user;
     },
     
     getAccessToken(scope) {
@@ -80,8 +85,7 @@ const Spotify = {
         return response.items.map(item => this.getTrackDetails(item))
     },
 
-    async getPlaylists() {
-        let user = await (await this.fetchSpotify('me', 'playlist-modify-public')).json();
+    async getPlaylists(user) {
         let response = await (await this.fetchSpotify(`users/${user.id}/playlists`, 'playlist-modify-public')).json();
         if(!response)
             return [];
@@ -163,20 +167,19 @@ const Spotify = {
         } 
     },
 
-    async savePlaylist(name, trackUris) {
+    async savePlaylist(user, name, trackUris) {
         if(!name || !trackUris.length) { 
             return
         }
         const accessToken = this.getAccessToken('playlist-modify-public');
         const headers = { Authorization: `Bearer ${accessToken}` };
-        const username = (await (await fetch('https://api.spotify.com/v1/me', { headers: headers })).json()).id;
-        const response = await (await fetch(`https://api.spotify.com/v1/users/${username}/playlists`, 
+        const response = await (await fetch(`https://api.spotify.com/v1/users/${user.id}/playlists`, 
                 {
                     headers: headers,
                     method: 'POST',
                     body: JSON.stringify({ name: name })
                 })).json();
-        this.addTracksToSavedPlaylist(trackUris, headers, username, response.id);
+        this.addTracksToSavedPlaylist(trackUris, headers, user.id, response.id);
         return {
             id: response.id,
             name: name,

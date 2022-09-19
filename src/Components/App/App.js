@@ -15,15 +15,17 @@ export default function App() {
   const [playlistTracks, setPlaylistTracks] = useState([]);
   const [playlistGenres, setPlaylistGenres] = useState(new Map());
   const [newPlaylistGenres, setNewPlaylistGenres] = useState(new Map());
+  const [user, setUser] = useState(null);
   
   useEffect(() => {
     Spotify.getAccessToken('user-library-read');
-    getPlaylists();
+    getStarted();
   }, [])
 
-  const getPlaylists = async() => {
-    setPlaylists(await Spotify.getPlaylists());
-    console.log(playlists);
+  const getStarted = async() => {
+    const appUser = await Spotify.getUser();
+    setUser(appUser);
+    setPlaylists(await Spotify.getPlaylists(appUser));
   }
   
   const getLikedTracks = async() => {
@@ -92,7 +94,7 @@ export default function App() {
 
   const savePlaylist = async() => {
     const trackURIs = playlistTracks.map(track => track.uri);
-    let newPlaylist = await Spotify.savePlaylist(playlistName, trackURIs);
+    let newPlaylist = await Spotify.savePlaylist(user, playlistName, trackURIs);
     setPlaylistName('');
     setPlaylistTracks([]);
     setNewPlaylistGenres(new Map());
@@ -117,7 +119,7 @@ export default function App() {
 
   const removePlaylist = async(playlistId) => {
     await Spotify.unfollowPlaylist(playlistId);
-    getPlaylists();
+    setPlaylists(playlists.filter(playlist => playlist.id !== playlistId));
   }
 
   return (
