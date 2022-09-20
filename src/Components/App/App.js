@@ -12,6 +12,7 @@ import Modal2 from '../Modal/Modal2.js'
 export default function App() {
   const [playlists, setPlaylists] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
+  const [likedTracksTotal, setLikedTracksTotal] = useState(0);
   const [playlistName, setPlaylistName] = useState('');
   const [playlistTracks, setPlaylistTracks] = useState([]);
   const [playlistGenres, setPlaylistGenres] = useState(new Map());
@@ -32,6 +33,7 @@ export default function App() {
       return [];
     }
     setUser(appUser);
+    setLikedTracksTotal(await Spotify.getLikedTracksTotal());
     setPlaylists(await Spotify.getPlaylists(appUser));
   }
   
@@ -137,6 +139,7 @@ export default function App() {
         </h1>
         <div className="Filters">
           <PlaylistBar playlists={playlists}
+                       likedTracksTotal={likedTracksTotal}
                        onGetTracks={getTracks}
                        onGetLikedTracks={getLikedTracks}
                        onRemove={removePlaylist}

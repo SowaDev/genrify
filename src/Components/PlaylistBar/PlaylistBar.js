@@ -5,17 +5,10 @@ import Modal from '../Modal/Modal.js'
 import './PlaylistBar.css'
 
 export default function PlaylistBar(props) {
-    const { playlists, onGetTracks, onGetLikedTracks, onRemove } = props;
-    const [likedTracksTotal, setLikedTracksTotal] = useState(0);
+    const { playlists, likedTracksTotal, onGetTracks, onGetLikedTracks, onRemove } = props;
     const [isModalOpen, setModalOpen] = useState(false);
     const [playlistNameToRemove, setPlaylistNameToRemove] = useState('');
     const [playlistIdToRemove, setPlaylistIdToRemove] = useState('');
-
-    useEffect(() => {
-        getLikedTracksTotal();
-    },[])
-
-    const getLikedTracksTotal = async () => setLikedTracksTotal(await Spotify.getLikedTracksTotal());
 
     const handleRemoveClick = (id, playlistName) => {
         setPlaylistNameToRemove(playlistName);
