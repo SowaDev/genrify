@@ -16,7 +16,10 @@ const Spotify = {
     },
 
     async getUser() {
-        const user = await (await this.fetchSpotify('me', 'playlist-modify-public')).json();
+        const response = await this.fetchSpotify('me', 'playlist-modify-public');
+        if(!response.ok)
+            return(false);
+        const user = await response.json();
         return user;
     },
     

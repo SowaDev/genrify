@@ -7,6 +7,7 @@ import Spotify from '../../util/Spotify'
 import PlaylistBar from '../PlaylistBar/PlaylistBar';
 import GenreBar from '../GenreBar/GenreBar';
 import ChosenGenreBar from '../ChosenGenreBar/ChosenGenreBar';
+import Modal2 from '../Modal/Modal2.js'
 
 export default function App() {
   const [playlists, setPlaylists] = useState([]);
@@ -16,6 +17,7 @@ export default function App() {
   const [playlistGenres, setPlaylistGenres] = useState(new Map());
   const [newPlaylistGenres, setNewPlaylistGenres] = useState(new Map());
   const [user, setUser] = useState(null);
+  const [isModalOpen, setModalOpen] = useState(false);
   
   useEffect(() => {
     Spotify.getAccessToken('user-library-read');
@@ -24,6 +26,11 @@ export default function App() {
 
   const getStarted = async() => {
     const appUser = await Spotify.getUser();
+    if(!appUser) {
+      console.log('bullshit')
+      setModalOpen(true);
+      return [];
+    }
     setUser(appUser);
     setPlaylists(await Spotify.getPlaylists(appUser));
   }
@@ -151,6 +158,12 @@ export default function App() {
                          onSave={savePlaylist}
                          onRemoveAll={removeAllTracks} />
         </div>
+        <Modal2 isModalOpen={isModalOpen}
+              onClose={() => setModalOpen(false)}>
+          {`The app is still in development mode.
+            Due to Spotify policy your email has to be added beforehand by the creator of the app.
+            Please send an e-mail to fukuroosawa@gmail.com in order to use the app.`}
+        </Modal2>
       </div>
   )
 }
