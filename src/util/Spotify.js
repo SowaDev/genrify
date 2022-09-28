@@ -1,50 +1,29 @@
 import TrackList from "../Components/TrackList/TrackList";
-
-let accessToken;
+let accessToken = '';
 const clientID = 'db19cb1182f140fab5eb77bcecedcd12'
+const scope = 'user-library-read playlist-modify-public'
 // const redirectUrl = 'http://localhost:3000/'
 const redirectUrl = 'https://genrify.netlify.app'
 
 const Spotify = {
 
-    fetchSpotify(url, scope) {
-        const token = Spotify.getAccessToken(scope)
+    fetchSpotify(url, token) {
         return fetch(`https://api.spotify.com/v1/${url}`, 
         { headers: {
             Authorization: `Bearer ${token}`
         }})
     },
 
-    async getUser() {
-        const response = await this.fetchSpotify('me', 'playlist-modify-public');
+    async getUser(token) {
+        const response = await this.fetchSpotify('me', token);
         if(!response.ok)
             return(false);
         const user = await response.json();
         return user;
     },
-    
-    getAccessToken(scope) {
-        if(accessToken){
-            return accessToken
-        }
-        const accessTokenMatch = window.location.href.match(/access_token=([^&]*)/)
-        const expiresInMatch = window.location.href.match(/expires_in=([^&]*)/)
 
-        if(accessTokenMatch && expiresInMatch){
-            accessToken = accessTokenMatch[1];
-            const expiresIn = Number(expiresInMatch[1])
-            window.setTimeout(() => accessToken = '', expiresIn * 1000)
-            window.history.pushState('Access Token', null, '/')
-            return accessToken
-        } else {
-            const allScopes = 'user-library-read playlist-modify-public'
-            const accessUrl = `https://accounts.spotify.com/authorize?client_id=${clientID}&response_type=token&scope=${allScopes}&redirect_uri=${redirectUrl}`
-            window.location = accessUrl
-        }
-    },
-
-    async search(term) {
-        let response = await (await this.fetchSpotify(`search?type=track&q=${term}`, 'playlist-modify-public')).json();
+    async search(term, token) {
+        let response = await (await this.fetchSpotify(`search?type=track&q=${term}`, token)).json();
         if(!response)
             return [];
         return response.tracks.items.map(track => ({
@@ -70,26 +49,26 @@ const Spotify = {
         }
     },
 
-    async getTracks(playlistId, total) {
+    async getTracks(playlistId, total, token) {
         let offset = 0;
         const tracks = [];
         do {
-            let part100Tracks = await this.get100Tracks(playlistId, offset);
+            let part100Tracks = await this.get100Tracks(playlistId, offset, token);
             tracks.push(part100Tracks)
             offset += 100;
         } while(offset < total)
         return tracks.flat();
     },
 
-    async get100Tracks(playlistId, offset) {
-        let response = await (await this.fetchSpotify(`playlists/${playlistId}/tracks?offset=${offset}`, 'playlist-modify-public')).json();
+    async get100Tracks(playlistId, offset, token) {
+        let response = await (await this.fetchSpotify(`playlists/${playlistId}/tracks?offset=${offset}`, token)).json();
         if(!response)
             return [];
         return response.items.map(item => this.getTrackDetails(item))
     },
 
-    async getPlaylists(user) {
-        let response = await (await this.fetchSpotify(`users/${user.id}/playlists`, 'playlist-modify-public')).json();
+    async getPlaylists(user, token) {
+        let response = await (await this.fetchSpotify(`users/${user.id}/playlists`, token)).json();
         if(!response)
             return [];
         return response.items.map(playlist => ({
@@ -101,49 +80,49 @@ const Spotify = {
     },
 
 
-    async get50LikedTracks(offset) {
-        let response = await (await this.fetchSpotify(`me/tracks?offset=${offset}&limit=50`, 'user-library-read')).json();
+    async get50LikedTracks(offset, token) {
+        let response = await (await this.fetchSpotify(`me/tracks?offset=${offset}&limit=50`, token)).json();
         if(!response)
             return [];
         return response.items.map(item => this.getTrackDetails(item))
     },
 
-    async getLikedTracksTotal() {
-        const response = await (await this.fetchSpotify(`me/tracks`)).json();
+    async getLikedTracksTotal(token) {
+        const response = await (await this.fetchSpotify(`me/tracks`, token)).json();
         return response.total;
     },
 
-    async getLikedTracks() {
+    async getLikedTracks(token) {
         let offset = 0;
         const tracks = [];
-        let total = await this.getLikedTracksTotal();
+        let total = await this.getLikedTracksTotal(token);
         do {
-            let part50Tracks = await this.get50LikedTracks(offset);
+            let part50Tracks = await this.get50LikedTracks(offset, token);
             tracks.push(part50Tracks)
             offset += 50;
         } while(offset < total)
         return tracks.flat();
     },
 
-    async getGenreByArtist(artistId) {
-        let response = await (await this.fetchSpotify(`artists/${artistId}`, 'playlist-modify-public')).json();
+    async getGenreByArtist(artistId, token) {
+        let response = await (await this.fetchSpotify(`artists/${artistId}`, token)).json();
         if(!response)
             return [];
         return response.genres;
     },  
 
-    async getTracksGenres(tracks) {
+    async getTracksGenres(tracks, token) {
         await Promise.all(tracks.map(async (track) => {
-            let trackGenres = await Spotify.getGenreByArtist(track.artistId)
+            let trackGenres = await Spotify.getGenreByArtist(track.artistId, token)
             track.genres = trackGenres
         }))
         return tracks
     },
 
-    async getPlaylistGenres(tracks) {
+    async getPlaylistGenres(tracks, token) {
         const playlistGenres = new Map();
         await Promise.all(tracks.map(async (track) => {
-            let trackGenres = await Spotify.getGenreByArtist(track.artistId);
+            let trackGenres = await Spotify.getGenreByArtist(track.artistId, token);
             trackGenres.forEach(genre => {
                 if(!playlistGenres.has(genre))
                     playlistGenres.set(genre, 1)
@@ -170,12 +149,11 @@ const Spotify = {
         } 
     },
 
-    async savePlaylist(user, name, trackUris) {
+    async savePlaylist(user, name, trackUris, token) {
         if(!name || !trackUris.length) { 
             return
         }
-        const accessToken = this.getAccessToken('playlist-modify-public');
-        const headers = { Authorization: `Bearer ${accessToken}` };
+        const headers = { Authorization: `Bearer ${token}` };
         const response = await (await fetch(`https://api.spotify.com/v1/users/${user.id}/playlists`, 
                 {
                     headers: headers,
@@ -191,9 +169,8 @@ const Spotify = {
         }
     },
 
-    unfollowPlaylist(playlistId) {
-        const accessToken = this.getAccessToken('playlist-modify-public');
-        const headers = { Authorization: `Bearer ${accessToken}` };
+    unfollowPlaylist(playlistId, token) {
+        const headers = { Authorization: `Bearer ${token}` };
         return fetch(`https://api.spotify.com/v1/playlists/${playlistId}/followers`,
             {
                 headers: headers,

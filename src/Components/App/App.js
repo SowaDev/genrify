@@ -10,6 +10,7 @@ import ChosenGenreBar from '../ChosenGenreBar/ChosenGenreBar';
 import Modal2 from '../Modal/Modal2.js'
 
 export default function App() {
+  const [token, setToken] = useState('')
   const [playlists, setPlaylists] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
   const [likedTracksTotal, setLikedTracksTotal] = useState(0);
@@ -21,26 +22,40 @@ export default function App() {
   const [isModalOpen, setModalOpen] = useState(false);
   
   useEffect(() => {
-    Spotify.getAccessToken('user-library-read');
-    getStarted();
+    let hashParams = {};
+    let e,
+      r = /([^&;=]+)=?([^&;]*)/g,
+      q = window.location.hash.substring(1);
+    while ((e = r.exec(q))) {
+      hashParams[e[1]] = decodeURIComponent(e[2]);
+    }
+
+    if (!hashParams.access_token) {
+      window.location.href =
+        'https://accounts.spotify.com/authorize?client_id=230be2f46909426b8b80cac36446b52a&scope=playlist-read-private%20playlist-read-collaborative%20playlist-modify-public%20user-read-recently-played%20playlist-modify-private%20ugc-image-upload%20user-follow-modify%20user-follow-read%20user-library-read%20user-library-modify%20user-read-private%20user-read-email%20user-top-read%20user-read-playback-state&response_type=token&redirect_uri=http://localhost:3000/callback';
+    } else {
+      let accessToken = hashParams.access_token;
+      window.history.pushState({}, null, "/")
+      getStarted(accessToken)
+      setToken(accessToken);
+    }
   }, [])
 
-  const getStarted = async() => {
-    const appUser = await Spotify.getUser();
+  const getStarted = async(accessToken) => {
+    const appUser = await Spotify.getUser(accessToken);
     if(!appUser) {
-      console.log('bullshit')
       setModalOpen(true);
-      return [];
+      return;
     }
     setUser(appUser);
-    setLikedTracksTotal(await Spotify.getLikedTracksTotal());
-    setPlaylists(await Spotify.getPlaylists(appUser));
+    setLikedTracksTotal(await Spotify.getLikedTracksTotal(accessToken));
+    setPlaylists(await Spotify.getPlaylists(appUser, accessToken));
   }
   
   const getLikedTracks = async() => {
-    let tracks = await Spotify.getTracksGenres(await Spotify.getLikedTracks());
+    let tracks = await Spotify.getTracksGenres(await Spotify.getLikedTracks(token), token);
     setSearchResults(tracks);
-    setPlaylistGenres(await Spotify.getPlaylistGenres(tracks));
+    setPlaylistGenres(await Spotify.getPlaylistGenres(tracks, token));
   }
 
   const addTracksByGenre = (genre) => {
@@ -103,7 +118,7 @@ export default function App() {
 
   const savePlaylist = async() => {
     const trackURIs = playlistTracks.map(track => track.uri);
-    let newPlaylist = await Spotify.savePlaylist(user, playlistName, trackURIs);
+    let newPlaylist = await Spotify.savePlaylist(user, playlistName, trackURIs, token);
     setPlaylistName('');
     setPlaylistTracks([]);
     setNewPlaylistGenres(new Map());
@@ -113,21 +128,21 @@ export default function App() {
   }
 
   const search = async(term) => {
-    let tracks = await Spotify.search(term);
-    let tracksWithGenres = await Spotify.getTracksGenres(tracks);
-    let genres = await Spotify.getPlaylistGenres(tracksWithGenres);
+    let tracks = await Spotify.search(term, token);
+    let tracksWithGenres = await Spotify.getTracksGenres(tracks, token);
+    let genres = await Spotify.getPlaylistGenres(tracksWithGenres, token);
     setSearchResults(tracksWithGenres);
     setPlaylistGenres(genres);
   }
 
   const getTracks = async(tracksUri, total) => {
-    let tracks = await Spotify.getTracksGenres(await Spotify.getTracks(tracksUri, total));
+    let tracks = await Spotify.getTracksGenres(await Spotify.getTracks(tracksUri, total, token));
     setSearchResults(tracks);
-    setPlaylistGenres(await Spotify.getPlaylistGenres(tracks));
+    setPlaylistGenres(await Spotify.getPlaylistGenres(tracks, token));
   }
 
   const removePlaylist = async(playlistId) => {
-    await Spotify.unfollowPlaylist(playlistId);
+    await Spotify.unfollowPlaylist(playlistId, token);
     setPlaylists(playlists.filter(playlist => playlist.id !== playlistId));
   }
 
