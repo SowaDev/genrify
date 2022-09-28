@@ -1,70 +1,43 @@
-# Getting Started with Create React App
+# Genrify 
+The main goal of Genrify is to allow you to make playlists in Spotify based on a genre. 
+# General Info
+My motivation to make this app was to learn React and to implement a functionality that I think is missing from Spotify. I've got big library and no way to sort it out unless by clicking manually one by one. It can be done using Genrify in just a few clicks.
+It might not always work perfect as Spotify Web API provides data where genre is assigned to an artist so there might be some cases where it doesn't match.
+# Deployment
+The app is up and running on Netlify https://genrify.netlify.app/. You have to log in using your Spotify credentials and send me an e-mail and write your e-mail address assigned to your Spotify account. Unfortunately, if you don't do it you will not be able to use the app. My app is still in development mode and due to Spotify Web API policy I have to whitelist your e-mail in the developer dashboard.
+# Installation
+If you don't want to use my app and/or send the e-mail or you just want to play around with the code you need to the following:
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+![Alt text](readme_images\spotify_screen_black.png "Title")
 
-## Available Scripts
+After sorting that out you need to download the repository from github and change the redirectUrl variable in App.js to 'http://localhost:3000/' and clientID for the one from your application and you're ready to go, you can run below command in the genrify directory\
+npm start
 
-In the project directory, you can run:
+# Usage
+When you're logged in all your playlist will be downloaded to the Your playlists box in the top left corner.
 
-### `npm start`
+## Your playlists
+Your liked songs will always be at the very top of that list.\
+After clicking on one of them, the songs from that playlists will be displayed in the box below called Results and genres of that songs will be displayed to the right in the box Genres with the actual number of the particular genre in the playlist.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+![Alt text](readme_images\yourplaylists.png "Title")
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Results
+In the Result box you can browse the songs from the chosen playlist and by clicking on the plus button you can add them one by one to your new playlist. You can also add all of the by clicking on +all.
 
-### `npm test`
+![Alt text](readme_images\results.png "Title")
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Genre
+In that box all of the genres from chosen playlist will be displayed together with a number of songs of that specific genre. After clicking on a genre button you will add all of the songs of that genre to your new playlist and you will add that genre to Added Genres Box together with many others as well (remember that a song can have many genres).
 
-### `npm run build`
+![Alt text](readme_images\genres.png "Title")
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Added genres
+Here will be displayed all of the genres that you actually have in your new playlist that you're creating at the moment. You can have lots of genres here just by adding one in Genre box.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+![Alt text](readme_images\added_genres.png "Title")
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Your playlist
+You can manage your new playlist here: name it, save it, remove specific and delete all tracks from it.
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+![Alt text](readme_images\new_playlist.png "Title")
