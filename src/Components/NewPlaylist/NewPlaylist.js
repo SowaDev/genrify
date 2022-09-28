@@ -10,7 +10,7 @@ export default function NewPlaylist(props) {
     return(
         <div className="NewPlaylist">
             <div className="Playlist-information">
-                <input defaultValue={'New Playlist'}
+                <input defaultValue={'Name your playlist'}
                     onChange={handleNameChange} />
                 <p>tracks: {tracks.length}</p>
             </div>
