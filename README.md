@@ -4,7 +4,7 @@ The main goal of Genrify is to allow you to make playlists in Spotify based on a
 My motivation to make this app was to learn React and to implement a functionality that I think is missing from Spotify. I've got big library and no way to sort it out unless by clicking manually one by one. It can be done using Genrify in just a few clicks.
 It might not always work perfect as Spotify Web API provides data where genre is assigned to an artist so there might be some cases where it doesn't match.
 # Deployment
-The app is up and running on Netlify https://genrify.netlify.app/. You have to log in using your Spotify credentials and send me an e-mail and write your e-mail address assigned to your Spotify account. Unfortunately, if you don't do it you will not be able to use the app. My app is still in development mode and due to Spotify Web API policy I have to whitelist your e-mail in the developer dashboard.
+The app is up and running on Netlify https://genrify.netlify.app/. You have to log in using your Spotify credentials and send me an e-mail with your e-mail address assigned to your Spotify account. Unfortunately, if you don't do it you will not be able to use the app. My app is still in development mode and due to Spotify Web API policy I have to whitelist your e-mail in the developer dashboard.
 # Installation
 If you don't want to use my app and/or send the e-mail or you just want to play around with the code you need to the following:
 
@@ -18,9 +18,9 @@ When you're logged in all your playlist will be downloaded to the Your playlists
 
 ## Your playlists
 Your liked songs will always be at the very top of that list.\
-After clicking on one of them, the songs from that playlists will be displayed in the box below called Results and genres of that songs will be displayed to the right in the box Genres with the actual number of the particular genre in the playlist.
+After clicking on a playlist the songs from that playlist will be displayed in the box below called Results and genres of that songs will be displayed to the right in the box Genres with the actual number of the particular genre in the playlist.
 
-![Alt text](readme_images/yourplaylists.png "Title")
+![Alt text](readme_images/your_playlists.png "Title")
 
 ## Results
 In the Result box you can browse the songs from the chosen playlist and by clicking on the plus button you can add them one by one to your new playlist. You can also add all of the by clicking on +all.
