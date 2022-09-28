@@ -1,10 +1,3 @@
-import TrackList from "../Components/TrackList/TrackList";
-let accessToken = '';
-const clientID = 'db19cb1182f140fab5eb77bcecedcd12'
-const scope = 'user-library-read playlist-modify-public'
-// const redirectUrl = 'http://localhost:3000/'
-const redirectUrl = 'https://genrify.netlify.app'
-
 const Spotify = {
 
     fetchSpotify(url, token) {
