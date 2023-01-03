@@ -1,18 +1,18 @@
 .GenreButton {
-    cursor: pointer;
-    width: 8.11rem;
-    padding: .55rem 0;
-    margin: .21rem;
-    border-radius: 54px;
-    background-color: #5482f0;
-    text-align: center;
-    font-size: .833rem;
-    transition: background-color .25s;
-    border: 0px;
-    color: #fff;
-    font-weight: 500;
-  }
-  
-  .GenreButton:hover {
-    background-color:  #25499d;
-  }
+  cursor: pointer;
+  width: 8.11rem;
+  padding: 0.55rem 0;
+  margin: 0.21rem;
+  border-radius: 54px;
+  background-color: #5482f0;
+  text-align: center;
+  font-size: 0.833rem;
+  transition: background-color 0.25s;
+  border: 0px;
+  color: #fff;
+  font-weight: 500;
+}
+
+.GenreButton:hover {
+  background-color: #25499d;
+}

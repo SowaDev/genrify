@@ -56,7 +56,7 @@ h2 {
 }
 
 @media screen and (min-height: 1500px) {
-  .App{
+  .App {
     height: 100%;
   }
 }

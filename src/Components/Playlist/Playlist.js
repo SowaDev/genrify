@@ -2,77 +2,35 @@ import React from 'react'
 import './Playlist.css'
 
 export default function Playlist(props) {
-    const { name, id, tracks, total, onGetTracks, onRemove } = props;
+  const { name, id, total, onGetTracks, onRemove } = props
 
-    const handleClick = () => onGetTracks(id, total);
+  const handleClick = () => onGetTracks(id, total)
 
-    const handleHover = () => document.getElementById(id).style.visibility = 'visible';
+  const handleHover = () =>
+    (document.getElementById(id).style.visibility = 'visible')
 
-    const handleLeave = () => document.getElementById(id).style.visibility = 'hidden';
+  const handleLeave = () =>
+    (document.getElementById(id).style.visibility = 'hidden')
 
-    return(
-        <div className='Playlist'
-             onMouseOver={handleHover}
-             onMouseOut={handleLeave} >
-            <div className='Playlist-information'>
-                <h3 onClick={handleClick}>{name}</h3>
-                <div className='Rightside'>
-                    <p>tracks: {total}</p>
-                    <button className='Remove-button'
-                            id={id}
-                            onClick={() => onRemove(id, name)}
-                            >x</button>
-                </div>
-            </div>
+  return (
+    <div
+      className="Playlist"
+      onMouseOver={handleHover}
+      onMouseOut={handleLeave}
+    >
+      <div className="Playlist-information">
+        <h3 onClick={handleClick}>{name}</h3>
+        <div className="Rightside">
+          <p>tracks: {total}</p>
+          <button
+            className="Remove-button"
+            id={id}
+            onClick={() => onRemove(id, name)}
+          >
+            x
+          </button>
         </div>
-    )
+      </div>
+    </div>
+  )
 }
-
-/* 47
-import React from 'react'
-import './Playlist.css'
-
-class Playlist extends React.Component {
-    constructor(props) {
-        super(props)
-        this.handleClick = this.handleClick.bind(this)
-        this.handleHover = this.handleHover.bind(this)
-        this.handleLeave = this.handleLeave.bind(this)
-        this.isHovering = false;
-    }
-
-    handleClick(event) {
-        this.props.onGetTracks(this.props.id, this.props.total)
-    }
-
-    handleHover() {
-        this.isHovering = true;
-        document.getElementById(this.props.id).style.visibility = 'visible';
-    }
-
-    handleLeave() {
-        this.isHovering = false;
-        document.getElementById(this.props.id).style.visibility = 'hidden';
-    }
-
-    render() {
-        return(
-            <div className='Playlist'
-                 onMouseOver={this.handleHover}
-                 onMouseOut={this.handleLeave} >
-                <div className='Playlist-information'>
-                    <h3 onClick={this.handleClick}>{this.props.name}</h3>
-                    <div className='Rightside'>
-                        <p>tracks: {this.props.total}</p>
-                        <button className='Remove-button'
-                                id={this.props.id}
-                                onClick={() => this.props.onRemove(this.props.id, this.props.name)}
-                                >x</button>
-                    </div>
-                </div>
-            </div>
-        )
-    }
-}
-
-export default Playlist */

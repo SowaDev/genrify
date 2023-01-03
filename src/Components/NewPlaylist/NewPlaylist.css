@@ -1,81 +1,81 @@
 .NewPlaylist {
-    overflow-y: scroll;
-    height: 950px;
-    width: 46%;
-    padding: .88rem;
-    margin: .88rem 0;
-    background-color: rgba(0, 0, 0, 0.6);
-    box-shadow: 0 4px 2px 2px #000000;
-  }
-  
-  .NewPlaylist input {
-    width: 80%;
-    border: 0;
-    outline: 0;
-    background: transparent;
-    border-bottom: 1px solid #6f6f6f;
-    font-family: 'Poppins', sans-serif;
-    font-size: 1.55rem;
-    color: #fff;
-    margin: 20px 0;
-  }
+  overflow-y: scroll;
+  height: 950px;
+  width: 46%;
+  padding: 0.88rem;
+  margin: 0.88rem 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  box-shadow: 0 4px 2px 2px #000000;
+}
 
-  .Playlist-information {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
+.NewPlaylist input {
+  width: 80%;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  border-bottom: 1px solid #6f6f6f;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.55rem;
+  color: #fff;
+  margin: 20px 0;
+}
 
-  .Buttons {
-    display: flex;
-    justify-content: space-between;
-  }
+.Playlist-information {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 
-  .Remove-all {
-    cursor: pointer;
-    width: 10rem;
-    padding: .77rem 0;
-    border-radius: 54px;
-    border-width: 0px;
-    margin-top: 1.27rem;
-    background-color: #5482f0;
-    text-align: center;
-    font-size: .83rem;
-    transition: background-color .25s;
-    color: #fff;
-    font-weight: 500;
+.Buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.Remove-all {
+  cursor: pointer;
+  width: 10rem;
+  padding: 0.77rem 0;
+  border-radius: 54px;
+  border-width: 0px;
+  margin-top: 1.27rem;
+  background-color: #5482f0;
+  text-align: center;
+  font-size: 0.83rem;
+  transition: background-color 0.25s;
+  color: #fff;
+  font-weight: 500;
+}
+
+.Remove-all:hover {
+  background-color: #25499d;
+}
+
+.Playlist-save {
+  cursor: pointer;
+  width: 10rem;
+  padding: 0.77rem 0;
+  border-radius: 54px;
+  border-width: 0px;
+  margin-top: 1.27rem;
+  background-color: #5482f0;
+  text-align: center;
+  font-size: 0.83rem;
+  transition: background-color 0.25s;
+  color: #fff;
+  font-weight: 500;
+}
+
+.Playlist-save:hover {
+  background-color: #25499d;
+}
+
+::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
+
+@media only screen and (max-width: 1020px) {
+  .Playlist {
+    width: 90%;
   }
-  
-  .Remove-all:hover {
-    background-color:  #25499d;
-  }
-  
-  .Playlist-save {
-    cursor: pointer;
-    width: 10rem;
-    padding: .77rem 0;
-    border-radius: 54px;
-    border-width: 0px;
-    margin-top: 1.27rem;
-    background-color: #5482f0;
-    text-align: center;
-    font-size: .83rem;
-    transition: background-color .25s;
-    color: #fff;
-    font-weight: 500;
-  }
-  
-  .Playlist-save:hover {
-    background-color:  #25499d;
-  }
-  
-  ::-webkit-scrollbar {
-      width: 0px;
-      background: transparent;
-  }
-  
-  @media only screen and (max-width: 1020px) {
-    .Playlist {
-      width: 90%;
-    }
-  }
+}

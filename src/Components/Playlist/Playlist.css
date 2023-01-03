@@ -1,47 +1,46 @@
-  .Playlist {
-    display: flex;
-    align-items: center;
-    border-bottom: 1px solid rgba(256, 256, 256, 0.8);
-    margin-top: 0.3rem;
-  }
+.Playlist {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid rgba(256, 256, 256, 0.8);
+  margin-top: 0.3rem;
+}
 
-  .Playlist-information {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    margin-top: .6rem;
-    height: 1.8rem;
-  }
+.Playlist-information {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 0.6rem;
+  height: 1.8rem;
+}
 
-  .Remove-button {
-    cursor: pointer;
-    border-radius: 54px;
-    border-width: 0px;
-    background-color: rgba(1, 12, 63, 0.7);
-    text-align: center;
-    font-size: .83rem;
-    transition: background-color .25s;
-    color: #fff;
-    font-weight: 500;
-    visibility: hidden;
-  }
+.Remove-button {
+  cursor: pointer;
+  border-radius: 54px;
+  border-width: 0px;
+  background-color: rgba(1, 12, 63, 0.7);
+  text-align: center;
+  font-size: 0.83rem;
+  transition: background-color 0.25s;
+  color: #fff;
+  font-weight: 500;
+  visibility: hidden;
+}
 
-  .Rightside {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-  }
+.Rightside {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
 
-  p {
-    margin-right: 1rem;
-    font-size: .83rem;
-    font-weight: 300;
-    color: rgba(256, 256, 256, 0.8);
-    text-align: left;
-  }
+p {
+  margin-right: 1rem;
+  font-size: 0.83rem;
+  font-weight: 300;
+  color: rgba(256, 256, 256, 0.8);
+  text-align: left;
+}
 
-  .Playlist h3:hover {
-    color: rgba(265, 265, 265, .5);
-  }
-
+.Playlist h3:hover {
+  color: rgba(265, 265, 265, 0.5);
+}

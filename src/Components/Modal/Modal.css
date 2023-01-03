@@ -19,26 +19,26 @@
 } */
 
 .Buttonz {
-    display: flex;
-    justify-content: space-around;
+  display: flex;
+  justify-content: space-around;
 }
 
 .mButton {
-    cursor: pointer;
-    width: 4rem;
-    padding: .77rem 0;
-    border-radius: 36px;
-    background-color: #2414fa;
-    text-align: center;
-    font-size: .833rem;
-    transition: background-color .25s;
-    border: 0px;
-    color: #fff;
-    font-weight: 500;
+  cursor: pointer;
+  width: 4rem;
+  padding: 0.77rem 0;
+  border-radius: 36px;
+  background-color: #2414fa;
+  text-align: center;
+  font-size: 0.833rem;
+  transition: background-color 0.25s;
+  border: 0px;
+  color: #fff;
+  font-weight: 500;
 }
 
 .mText {
-    font-size: 1rem;
-    font-weight: bold;
-    margin: 1rem;
+  font-size: 1rem;
+  font-weight: bold;
+  margin: 1rem;
 }
