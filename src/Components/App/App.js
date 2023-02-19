@@ -126,6 +126,7 @@ export default function App() {
   const updatePlaylistName = (text) => setPlaylistName(text)
 
   const savePlaylist = async () => {
+    if (playlistName === '' || !playlistTracks) return
     const trackURIs = playlistTracks.map((track) => track.uri)
     let newPlaylist = await Spotify.savePlaylist(
       user,
