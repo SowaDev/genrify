@@ -195,6 +195,7 @@ export default function App() {
         <NewPlaylist
           name={playlistName}
           tracks={playlistTracks}
+          playlistName={playlistName}
           onRemove={removeTrack}
           onNameChange={updatePlaylistName}
           onSave={savePlaylist}
