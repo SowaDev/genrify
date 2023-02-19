@@ -101,8 +101,8 @@ export default function App() {
   }
 
   const addAllTracks = () => {
-    setPlaylistTracks(searchResults)
-    setNewPlaylistGenres(playlistGenres)
+    setPlaylistTracks((prev) => [...prev, searchResults])
+    setNewPlaylistGenres((prev) => [...prev, playlistGenres])
   }
 
   const addTrack = (track) => {
