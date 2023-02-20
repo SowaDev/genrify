@@ -101,8 +101,13 @@ export default function App() {
   }
 
   const addAllTracks = () => {
-    setPlaylistTracks((prev) => [...prev, searchResults])
-    setNewPlaylistGenres((prev) => [...prev, playlistGenres])
+    setPlaylistTracks((prev) => {
+      const notIncluded = searchResults.filter(
+        (track) => !prev.some((prevTrack) => prevTrack.id === track.id)
+      )
+      notIncluded.forEach((track) => addGenres(track))
+      return [...prev, ...notIncluded]
+    })
   }
 
   const addTrack = (track) => {
